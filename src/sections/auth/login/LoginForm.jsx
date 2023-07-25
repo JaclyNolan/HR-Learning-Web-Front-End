@@ -5,6 +5,9 @@ import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@m
 import { LoadingButton } from '@mui/lab';
 // components
 import Iconify from '../../../components/iconify';
+import BACKEND_URL from '../../../url';
+import axiosClient from '../../../axios-client';
+import useAuth from '../../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 
@@ -12,19 +15,39 @@ export default function LoginForm() {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
+  const { setUser, setToken } = useAuth();
 
-  const handleClick = () => {
-    navigate('/dashboard', { replace: true });
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const payload = {
+      email: data.get('email'),
+      password: data.get('password'),
+    }
+
+    /**
+     * @return "user": {
+        "name": "Horace Goodwin",
+        "email": "anhbg330011@gmail.com"
+        },
+        "role": "admin",
+        "token": "9|1tCCTCDXcRqRSoOISIqnk0jDP5nYCs0L23m1jGho"
+     */
+    const response = await axiosClient.post(BACKEND_URL.LOGIN_URL, payload);
+    const { user, token } = response.data;
+    setUser(user);
+    setToken(token);
   };
 
   return (
-    <>
+    <form onSubmit={handleSubmit}>
       <Stack spacing={3}>
-        <TextField name="email" label="Email address" />
+        <TextField name="email" label="Email address" required autoFocus />
 
         <TextField
           name="password"
           label="Password"
+          required
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -37,7 +60,6 @@ export default function LoginForm() {
           }}
         />
       </Stack>
-
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
         <Checkbox name="remember" label="Remember me" />
         <Link variant="subtitle2" underline="hover">
@@ -45,9 +67,9 @@ export default function LoginForm() {
         </Link>
       </Stack>
 
-      <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
+      <LoadingButton fullWidth size="large" type="submit" variant="contained">
         Login
       </LoadingButton>
-    </>
+    </form>
   );
 }
