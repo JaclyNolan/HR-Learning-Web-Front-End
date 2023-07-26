@@ -41,7 +41,7 @@ export default function CourseList() {
     }
 
     const TABLE_HEAD = [
-        { id: 'id', lavel: "Id", alignRight: false },
+        { id: 'id', label: "Id", alignRight: false },
         { id: 'name', label: 'Name', alignRight: false, orderable: true },
         { id: 'description', label: 'Description', alignRight: false },
         { id: 'course_category.name', label: 'Category', alignRight: false },
@@ -53,14 +53,18 @@ export default function CourseList() {
         return (<>
             <TableCell align="left">{course.id}</TableCell>
 
-            <TableCell component="th" scope="row" padding="none">
+            {/* <TableCell component="th" scope="row" padding="none">
                 <Stack direction="row" alignItems="center" spacing={2}>
-                    {/* <Avatar alt={course.name} src={avatarUrl} /> */}
+                    <Avatar alt={course.name} src={avatarUrl} />
                     <Typography variant="subtitle2" noWrap>
                         {course.name}
                     </Typography>
                 </Stack>
-            </TableCell>
+            </TableCell> */}
+
+            <TableCell align="left"><Typography variant="subtitle2" noWrap>
+                {course.name}
+            </Typography></TableCell>
 
             <TableCell align="left">{course.description}</TableCell>
 
@@ -133,7 +137,7 @@ export default function CourseList() {
         }
         fetchRef.current += 1;
         const fetchId = fetch.current;
-        const response = await axiosClient.get(BACKEND_URL.STAFF_COURSE_INDEX_ENDPOINT, {params})
+        const response = await axiosClient.get(BACKEND_URL.STAFF_COURSE_INDEX_ENDPOINT, { params })
         if (fetchId !== fetch.current) return
         setFetchData(response.data);
         setFetchingData(false);

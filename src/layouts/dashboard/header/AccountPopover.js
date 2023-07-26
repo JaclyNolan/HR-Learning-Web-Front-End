@@ -36,6 +36,10 @@ export default function AccountPopover() {
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
+  
+  const handleClose = (event) => {
+    setOpen(null);
+  };
 
   const handleLogout = () => {
     setOpen(null);
@@ -72,7 +76,7 @@ export default function AccountPopover() {
       <Popover
         open={Boolean(open)}
         anchorEl={open}
-        // onClose={handleLogout}
+        onClose={handleClose}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         PaperProps={{
