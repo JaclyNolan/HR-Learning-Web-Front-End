@@ -41,7 +41,7 @@ export default function CourseList() {
     }
 
     const TABLE_HEAD = [
-        { id: 'id', label: "Id", alignRight: false },
+        { id: 'id', label: "Id", alignRight: false, orderable: true },
         { id: 'name', label: 'Name', alignRight: false, orderable: true },
         { id: 'description', label: 'Description', alignRight: false },
         { id: 'course_category.name', label: 'Category', alignRight: false },
