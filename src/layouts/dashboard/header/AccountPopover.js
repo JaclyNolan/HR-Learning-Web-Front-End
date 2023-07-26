@@ -40,7 +40,7 @@ export default function AccountPopover() {
   const handleLogout = () => {
     setOpen(null);
     (async() => {
-      const response = await axiosClient.delete(BACKEND_URL.LOGOUT_URL)
+      const response = await axiosClient.delete(BACKEND_URL.LOGOUT_ENDPOINT)
       setUser(null);
       setToken(null);
       return navigate('/login');

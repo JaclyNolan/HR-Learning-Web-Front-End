@@ -13,6 +13,7 @@ import RequireAuth from './HOC/RequireAuth';
 import RequireGuest from './HOC/RequireGuest';
 import Unauthorized from './pages/Unauthorized';
 import useAuth from './hooks/useAuth';
+import { CourseList } from './pages/CoursePages';
 
 // ----------------------------------------------------------------------
 
@@ -74,7 +75,7 @@ const staffRoutes = [
           { path: 'trainee', element: <UserPage /> },
           { path: 'trainer', element: <UserPage /> },
           { path: 'topic', element: <UserPage /> },
-          { path: 'course', element: <UserPage /> },
+          { path: 'course', element: <CourseList /> },
           { path: 'courseCategory', element: <UserPage /> },
         ],
       },

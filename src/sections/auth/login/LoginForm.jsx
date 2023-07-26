@@ -33,7 +33,7 @@ export default function LoginForm() {
         "role": "admin",
         "token": "9|1tCCTCDXcRqRSoOISIqnk0jDP5nYCs0L23m1jGho"
      */
-    const response = await axiosClient.post(BACKEND_URL.LOGIN_URL, payload);
+    const response = await axiosClient.post(BACKEND_URL.LOGIN_ENDPOINT, payload);
     const { user, token } = response.data;
     setUser(user);
     setToken(token);
