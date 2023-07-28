@@ -42,10 +42,9 @@ export const AuthProvider = ({ children }) => {
         (async () => {
             setUserFetching(true);
             if (token && user === null) {
-                await axiosClient.get(BACKEND_URL.CHECK_TOKEN_URL)
+                await axiosClient.get(BACKEND_URL.CHECK_TOKEN_ENDPOINT)
                 .then((response) => {
                     // Store the fetched user data in AuthContext
-                    console.log(`Fetched! ${response}`);
                     setUser(response.data.user);
                 })
                 .catch((error) => {

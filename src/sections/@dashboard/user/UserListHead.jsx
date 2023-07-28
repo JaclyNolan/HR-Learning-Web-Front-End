@@ -57,9 +57,9 @@ export default function UserListHead({
           >
             <TableSortLabel
               hideSortIcon
-              active={orderBy === headCell.id}
+              active={headCell.orderable}
               direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
+              onClick={createSortHandler(headCell)}
             >
               {headCell.label}
               {orderBy === headCell.id ? (

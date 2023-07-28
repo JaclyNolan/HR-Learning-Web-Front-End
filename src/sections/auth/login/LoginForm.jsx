@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // @mui
-import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
+import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox, FormControlLabel } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
 import Iconify from '../../../components/iconify';
@@ -16,9 +16,11 @@ export default function LoginForm() {
 
   const [showPassword, setShowPassword] = useState(false);
   const { setUser, setToken } = useAuth();
+  const [isFetching, setFetching] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setFetching(true);
     const data = new FormData(event.currentTarget);
     const payload = {
       email: data.get('email'),
@@ -33,7 +35,7 @@ export default function LoginForm() {
         "role": "admin",
         "token": "9|1tCCTCDXcRqRSoOISIqnk0jDP5nYCs0L23m1jGho"
      */
-    const response = await axiosClient.post(BACKEND_URL.LOGIN_URL, payload);
+    const response = await axiosClient.post(BACKEND_URL.LOGIN_ENDPOINT, payload);
     const { user, token } = response.data;
     setUser(user);
     setToken(token);
@@ -61,13 +63,18 @@ export default function LoginForm() {
         />
       </Stack>
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-        <Checkbox name="remember" label="Remember me" />
+        <FormControlLabel
+          value="remember_me"
+          control={<Checkbox />}
+          label="Remember me"
+          labelPlacement="end"
+        />
         <Link variant="subtitle2" underline="hover">
           Forgot password?
         </Link>
       </Stack>
 
-      <LoadingButton fullWidth size="large" type="submit" variant="contained">
+      <LoadingButton loading={isFetching} fullWidth size="large" type="submit" variant="contained">
         Login
       </LoadingButton>
     </form>

@@ -7,8 +7,8 @@ const axiosClient = axios.create({
 axiosClient.interceptors.request.use((config) => {
   const token = localStorage.getItem('ACCESS_TOKEN');
   config.headers.Authorization = `Bearer ${token}`
-  const urlWithParams = `${config.url}?${new URLSearchParams(config.params).toString()}`;
-  console.log('Request URL with Params:', urlWithParams);
+  const urlWithParams = config.method.toUpperCase().concat(` ${config.url}`, (config.params ? `?${new URLSearchParams(config.params).toString()}` : ''));
+  console.log('Request URL:', urlWithParams);
   return config;
 })
 
