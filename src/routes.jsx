@@ -42,6 +42,16 @@ const commonRoutes = [
   },
 ]
 
+const guestRoutes = [
+  {
+    element: <RequireAuth/>,
+    children: [
+      { element: <Navigate to="/login" />, index: true },
+    ]
+  },
+  ...commonRoutes
+]
+
 const adminRoutes = [
   {
     element: <RequireAuth allowedRoles={['admin']} />,
@@ -110,7 +120,7 @@ const findRouter = (role) => {
     case "trainer":
       return trainerRoutes
     default:
-      return commonRoutes
+      return guestRoutes
   }
 }
 
