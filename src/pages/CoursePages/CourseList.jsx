@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Avatar, Button, Container, Stack, TableCell, Typography } from '@mui/material';
-import UserPage from "../UserPage";
 import BACKEND_URL from "../../url";
 import axiosClient from "../../axios-client";
 import Iconify from "../../components/iconify/Iconify";
+import UserListTable from "../../sections/@dashboard/user/UserListTable";
 
 export default function CourseList() {
-    const [open, setOpen] = useState(null);
 
     const [page, setPage] = useState(0);
 
@@ -30,7 +29,6 @@ export default function CourseList() {
     const fetchRef = useRef(0);
 
     const useStateData = {
-        open, setOpen,
         page, setPage,
         order, setOrder,
         selected, setSelected,
@@ -136,11 +134,22 @@ export default function CourseList() {
             perPage: rowsPerPage,
         }
         fetchRef.current += 1;
-        const fetchId = fetch.current;
+        const fetchId = fetchRef.current;
         const response = await axiosClient.get(BACKEND_URL.STAFF_COURSE_INDEX_ENDPOINT, { params })
-        if (fetchId !== fetch.current) return
+        if (fetchId !== fetchRef.current) return
         setFetchData(response.data);
         setFetchingData(false);
+    }
+
+    const deleteCourse = async (id) => {
+        setFetchingData(true);
+        const response = await axiosClient.delete(BACKEND_URL.STAFF_COURSE_INDEX_ENDPOINT.concat(`/${id}`));
+        const message = response.data;
+        if (page === 0)
+            fetchCourseData();
+        else
+            setPage(0);
+        alert(message);
     }
 
     useEffect(() => {
@@ -156,18 +165,19 @@ export default function CourseList() {
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>
-                        Course
+                        Course Management
                     </Typography>
                     <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
                         New Course
                     </Button>
                 </Stack>
-                <UserPage
+                <UserListTable
                     TABLE_HEAD={TABLE_HEAD}
                     TABLE_ROW={TABLE_ROW}
                     useStateData={useStateData}
                     searchText={searchText}
                     fetchData={fetchData}
+                    deleteEntry={deleteCourse}
                 />
             </Container>
         </>

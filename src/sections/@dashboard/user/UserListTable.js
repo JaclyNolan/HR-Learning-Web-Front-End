@@ -25,11 +25,11 @@ import {
   TablePagination,
 } from '@mui/material';
 // components
-import Label from '../components/label';
-import Iconify from '../components/iconify';
-import Scrollbar from '../components/scrollbar';
+import Label from '../../../components/label';
+import Iconify from '../../../components/iconify';
+import Scrollbar from '../../../components/scrollbar';
 // sections
-import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
+import { UserListHead, UserListToolbar } from '.';
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
@@ -74,10 +74,15 @@ import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 }
  * */
 
-export default function UserPage({
-  TABLE_HEAD = [], TABLE_ROW = () => { }, searchText, useStateData = {}, fetchData = null
+export default function UserListTable({
+  TABLE_HEAD = [],
+  TABLE_ROW = () => { },
+  searchText,
+  useStateData = {},
+  fetchData = null,
+  deleteEntry = () => { }
 }) {
-  const { open, setOpen,
+  const {
     page, setPage,
     order, setOrder,
     selected, setSelected,
@@ -86,21 +91,31 @@ export default function UserPage({
     rowsPerPage, setRowsPerPage,
     isFetchingData, setFetchingData } = useStateData;
 
+  const [open, setOpen] = useState(null);
+
+  const [openId, setOpenId] = useState(null);
+
   const fetchDataTotal = fetchData ? fetchData.total : 0;
 
   const fetchDataLength = fetchData ? fetchData.data.length : 0;
 
   const fetchDataData = fetchData ? fetchData.data : []
 
-  console.log(fetchData);
-
-  const handleOpenMenu = (event) => {
+  const handleOpenMenu = (event, id) => {
     setOpen(event.currentTarget);
+    setOpenId(id);
   };
 
   const handleCloseMenu = () => {
     setOpen(null);
+    setOpenId(null);
   };
+
+  const handleSingleDelete = () => {
+    setOpen(null);
+    setOpenId(null);
+    deleteEntry(openId);
+  }
 
   const handleRequestSort = (event, property) => {
     if (property.orderable) {
@@ -118,7 +133,6 @@ export default function UserPage({
     }
     setSelected([]);
   };
-  // console.log(selected);
 
   const handleClick = (event, id) => {
     const selectedIndex = selected.indexOf(id);
@@ -137,7 +151,6 @@ export default function UserPage({
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-    console.log(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -152,7 +165,7 @@ export default function UserPage({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     return debounce(handleFilterByName, 700);
-})
+  })
 
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - fetchDataTotal) : 0;
@@ -163,7 +176,7 @@ export default function UserPage({
   return (
     <>
       <Card>
-        <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={debounceSetter} searchText={searchText}/>
+        <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={debounceSetter} searchText={searchText} />
         <Spin spinning={isFetchingData}>
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -191,7 +204,9 @@ export default function UserPage({
                         {TABLE_ROW(row)}
 
                         <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
+                          <IconButton size="large" color="inherit" onClick={(event) => {
+                            handleOpenMenu(event, id);
+                          }}>
                             <Iconify icon={'eva:more-vertical-fill'} />
                           </IconButton>
                         </TableCell>
@@ -266,7 +281,7 @@ export default function UserPage({
           Edit
         </MenuItem>
 
-        <MenuItem sx={{ color: 'error.main' }}>
+        <MenuItem sx={{ color: 'error.main' }} onClick={handleSingleDelete}>
           <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
           Delete
         </MenuItem>

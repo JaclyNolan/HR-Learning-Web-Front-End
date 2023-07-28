@@ -38,7 +38,6 @@ export default function UserListHead({
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
-  console.log(rowCount, numSelected);
 
   return (
     <TableHead>

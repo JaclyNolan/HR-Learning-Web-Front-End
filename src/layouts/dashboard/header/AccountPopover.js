@@ -15,14 +15,17 @@ const MENU_OPTIONS = [
   {
     label: 'Home',
     icon: 'eva:home-fill',
+    path: '/'
   },
   {
     label: 'Profile',
     icon: 'eva:person-fill',
+    path: '/profile'
   },
   {
     label: 'Settings',
     icon: 'eva:settings-2-fill',
+    path: '/settings'
   },
 ];
 
@@ -30,20 +33,24 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
-  const { user ,setUser, token, setToken} = useAuth();
+  const { user, setUser, token, setToken } = useAuth();
   const navigate = useNavigate();
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
-  
+
   const handleClose = (event) => {
     setOpen(null);
   };
 
+  const handleClick = (option) => {
+    return navigate(option.path);
+  };
+
   const handleLogout = () => {
     setOpen(null);
-    (async() => {
+    (async () => {
       const response = await axiosClient.delete(BACKEND_URL.LOGOUT_ENDPOINT)
       setUser(null);
       setToken(null);
@@ -105,8 +112,10 @@ export default function AccountPopover() {
 
         <Stack sx={{ p: 1 }}>
           {MENU_OPTIONS.map((option) => (
-            <MenuItem key={option.label} 
-            // onClick={handleLogout}
+            <MenuItem key={option.label}
+              onClick={() => {
+                handleClick(option)
+              }}
             >
               {option.label}
             </MenuItem>
