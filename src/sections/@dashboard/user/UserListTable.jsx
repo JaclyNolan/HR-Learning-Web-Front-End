@@ -89,11 +89,12 @@ export default function UserListTable({
     orderBy, setOrderBy,
     filterName, setFilterName,
     rowsPerPage, setRowsPerPage,
-    isFetchingData, setFetchingData } = useStateData;
+    isFetchingData, setFetchingData,
+    openId, setOpenId,
+    editModalOpen, setEditModalOpen } = useStateData;
 
   const [open, setOpen] = useState(null);
 
-  const [openId, setOpenId] = useState(null);
 
   const fetchDataTotal = fetchData ? fetchData.total : 0;
 
@@ -276,7 +277,7 @@ export default function UserListTable({
           },
         }}
       >
-        <MenuItem>
+        <MenuItem onClick={() => {setEditModalOpen(true)}}>
           <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
           Edit
         </MenuItem>
