@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { debounce, filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 // @antd
 import { Spin } from 'antd';
 // @mui
@@ -79,8 +79,8 @@ export default function UserListTable({
   TABLE_ROW = () => { },
   searchText,
   useStateData = {},
-  fetchData = null,
-  deleteEntry = () => { }
+  deleteEntry = async () => { },
+  refreshTable
 }) {
   const {
     page, setPage,
@@ -91,16 +91,22 @@ export default function UserListTable({
     rowsPerPage, setRowsPerPage,
     isFetchingData, setFetchingData,
     openId, setOpenId,
-    editModalOpen, setEditModalOpen } = useStateData;
+    editModalOpen, setEditModalOpen,
+    fetchData, setFetchData
+  } = useStateData;
 
   const [open, setOpen] = useState(null);
-
 
   const fetchDataTotal = fetchData ? fetchData.total : 0;
 
   const fetchDataLength = fetchData ? fetchData.data.length : 0;
 
-  const fetchDataData = fetchData ? fetchData.data : []
+  const [fetchDataData, setFetchDataData] = useState(fetchData ? fetchData.data : [])
+
+  useEffect(() => {
+    const newFetchDataData = fetchData ? fetchData.data : []
+    setFetchDataData(newFetchDataData);
+  }, [fetchData])
 
   const handleOpenMenu = (event, id) => {
     setOpen(event.currentTarget);
@@ -112,10 +118,50 @@ export default function UserListTable({
     setOpenId(null);
   };
 
-  const handleSingleDelete = () => {
+  const handleSingleDelete = async () => {
     setOpen(null);
     setOpenId(null);
-    deleteEntry(openId);
+    const response = await deleteEntry(openId);
+    selected.splice(selected.indexOf(openId), 1)
+    refreshTable();
+    alert(response.data);
+  }
+
+  const handleMultpleDelete = () => {
+    let successfulDelete = 0;
+    const selectedLen = selected.length;
+    const deleteMultipleEntries = async (selectedId) => {
+      console.log("Deleting: " + selectedId);
+      await deleteEntry(selectedId);
+      successfulDelete += 1;
+
+      // Remove the entry from the selected array
+      const index = selected.indexOf(selectedId);
+      if (index !== -1) {
+        selected.splice(index, 1);
+        const newSelected = selected
+        setSelected(newSelected);
+      }
+
+      // Remove the entry from the table data
+      const indexToRemove = fetchDataData.findIndex((element) => element.id === selectedId);
+      if (indexToRemove !== -1) {
+        fetchDataData.splice(indexToRemove, 1);
+        setFetchDataData([...fetchDataData]);
+      }
+      console.log(selected);
+      console.log(fetchDataData);
+
+      if (successfulDelete === selectedLen) {
+        refreshTable();
+        alert("All selected deleted successfully!")
+      }
+    }
+
+    for (let i = selected.length - 1; i >= 0; i--) {
+      const selectedId = selected[i];
+      deleteMultipleEntries(selectedId);
+    }
   }
 
   const handleRequestSort = (event, property) => {
@@ -177,7 +223,12 @@ export default function UserListTable({
   return (
     <>
       <Card>
-        <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={debounceSetter} searchText={searchText} />
+        <UserListToolbar
+          numSelected={selected.length}
+          filterName={filterName}
+          onFilterName={debounceSetter}
+          searchText={searchText}
+          handleMultipleDelte={handleMultpleDelete} />
         <Spin spinning={isFetchingData}>
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -277,7 +328,7 @@ export default function UserListTable({
           },
         }}
       >
-        <MenuItem onClick={() => {setEditModalOpen(true)}}>
+        <MenuItem onClick={() => { setEditModalOpen(true) }}>
           <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
           Edit
         </MenuItem>

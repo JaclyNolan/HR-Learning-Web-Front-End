@@ -56,7 +56,8 @@ export default function CourseList() {
         rowsPerPage, setRowsPerPage,
         isFetchingData, setFetchingData,
         openId, setOpenId,
-        editModalOpen, setEditModalOpen
+        editModalOpen, setEditModalOpen,
+        fetchData, setFetchData
     }
 
     const TABLE_HEAD = [
@@ -165,12 +166,14 @@ export default function CourseList() {
     const deleteCourse = async (id) => {
         setFetchingData(true);
         const response = await axiosClient.delete(BACKEND_URL.STAFF_COURSE_DELETE_ENDPOINT.concat(`/${id}`));
-        const message = response.data;
+        return response
+    }
+
+    const refreshTable = async (ids) => {
         if (page === 0)
             fetchCourseData();
         else
             setPage(0);
-        alert(message);
     }
 
     const handleAddModalOpen = () => setAddModalOpen(true);
@@ -201,8 +204,8 @@ export default function CourseList() {
                     TABLE_ROW={TABLE_ROW}
                     useStateData={useStateData}
                     searchText={searchText}
-                    fetchData={fetchData}
                     deleteEntry={deleteCourse}
+                    refreshTable={refreshTable}
                 />
             </Container>
             <Modal

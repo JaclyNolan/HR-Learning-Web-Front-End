@@ -1,9 +1,8 @@
-import { Autocomplete, Box, CircularProgress, TextField } from '@mui/material';
+import { Autocomplete, Box, CircularProgress, Menu, MenuItem, TextField } from '@mui/material';
 import debounce from 'lodash/debounce';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 function DebounceSelect({ fetchOptions, debounceTimeout = 800, presetOptions = [], ...props }) {
-    const { name, label, value = '', ...props2 } = props;
     const [open, setOpen] = useState(false);
     const [fetching, setFetching] = useState(false);
     const [options, _setOptions] = useState([]);
@@ -40,46 +39,18 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 800, presetOptions = [
         debounceFetcher.apply(null, [""])
     }, [])
     return (
-        <Autocomplete
+        <TextField
+            {...props}
             fullWidth
-            open={open}
-            onOpen={() => {
-                setOpen(true);
+            select
+            InputProps={{
+                startAdornment: fetching ? <CircularProgress color="inherit" size={30} /> : null,
             }}
-            onClose={() => {
-                setOpen(false);
-            }}
-            isOptionEqualToValue={(option, value) => option.value === value.value}
-            getOptionLabel={(option) => `${option.value}`}
-            // inputValue={}
-            autoHighlight={false}
-            options={options}
-            loading={fetching}
-            onInputChange={(event, value) => {debounceFetcher(value)}}
-            renderOption={(props, option) => (
-                <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-                    {option.label}
-                </Box>
-            )}
-            renderInput={(params) => (
-                <TextField
-                    {...params}
-                    {...props2}
-                    label={label}
-                    name={name}
-                    defaultValue={value.toString()}
-                    InputProps={{
-                        ...params.InputProps,
-                        endAdornment: (
-                            <>
-                                {fetching ? <CircularProgress color="inherit" size={20} /> : null}
-                                {params.InputProps.endAdornment}
-                            </>
-                        ),
-                    }}
-                />
-            )}
-        />
+        >
+            {...options.map((option) => (<MenuItem key={option.value} value={option.value}>
+                {option.label}
+            </MenuItem>))}
+        </TextField>
     );
 }
 
