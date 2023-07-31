@@ -38,7 +38,13 @@ UserListToolbar.propTypes = {
   onFilterName: PropTypes.func,
 };
 
-export default function UserListToolbar({ numSelected, filterName, onFilterName, searchText }) {
+export default function UserListToolbar({ 
+  numSelected, 
+  filterName, 
+  onFilterName, 
+  searchText,
+  handleMultipleDelte
+}) {
   return (
     <StyledRoot
       sx={{
@@ -66,7 +72,7 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={handleMultipleDelte}>
             <Iconify icon="eva:trash-2-fill" />
           </IconButton>
         </Tooltip>

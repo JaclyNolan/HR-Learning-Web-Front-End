@@ -1,12 +1,31 @@
 import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Avatar, Button, Container, Stack, TableCell, Typography } from '@mui/material';
+import { Avatar, Box, Button, Container, Modal, Stack, TableCell, Typography } from '@mui/material';
 import BACKEND_URL from "../../url";
 import axiosClient from "../../axios-client";
 import Iconify from "../../components/iconify/Iconify";
 import UserListTable from "../../sections/@dashboard/user/UserListTable";
+import CourseAdd from "./CourseAdd";
+import CourseEdit from './CourseEdit';
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 552,
+    bgcolor: 'background.paper',
+    border: '0px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
 
 export default function CourseList() {
+
+    const [addModalOpen, setAddModalOpen] = useState(false);
+    const [editModalOpen, setEditModalOpen] = useState(false);
+
+    const [openId, setOpenId] = useState(null);
 
     const [page, setPage] = useState(0);
 
@@ -36,6 +55,9 @@ export default function CourseList() {
         filterName, setFilterName,
         rowsPerPage, setRowsPerPage,
         isFetchingData, setFetchingData,
+        openId, setOpenId,
+        editModalOpen, setEditModalOpen,
+        fetchData, setFetchData
     }
 
     const TABLE_HEAD = [
@@ -143,14 +165,20 @@ export default function CourseList() {
 
     const deleteCourse = async (id) => {
         setFetchingData(true);
-        const response = await axiosClient.delete(BACKEND_URL.STAFF_COURSE_INDEX_ENDPOINT.concat(`/${id}`));
-        const message = response.data;
+        const response = await axiosClient.delete(BACKEND_URL.STAFF_COURSE_DELETE_ENDPOINT.concat(`/${id}`));
+        return response
+    }
+
+    const refreshTable = async (ids) => {
         if (page === 0)
             fetchCourseData();
         else
             setPage(0);
-        alert(message);
     }
+
+    const handleAddModalOpen = () => setAddModalOpen(true);
+    const handleAddModalClose = () => setAddModalOpen(false);
+    const handleEditModalClose = () => setEditModalOpen(false);
 
     useEffect(() => {
         fetchCourseData();
@@ -167,7 +195,7 @@ export default function CourseList() {
                     <Typography variant="h4" gutterBottom>
                         Course Management
                     </Typography>
-                    <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+                    <Button onClick={handleAddModalOpen} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
                         New Course
                     </Button>
                 </Stack>
@@ -176,10 +204,33 @@ export default function CourseList() {
                     TABLE_ROW={TABLE_ROW}
                     useStateData={useStateData}
                     searchText={searchText}
-                    fetchData={fetchData}
                     deleteEntry={deleteCourse}
+                    refreshTable={refreshTable}
                 />
             </Container>
+            <Modal
+                key={'add'}
+                open={addModalOpen}
+                onClose={handleAddModalClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <CourseAdd fetchList={fetchCourseData} />
+                </Box>
+            </Modal>
+
+            <Modal
+                key={'edit'}
+                open={editModalOpen}
+                onClose={handleEditModalClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <CourseEdit fetchList={fetchCourseData} entryId={openId} />
+                </Box>
+            </Modal>
         </>
     );
 }
