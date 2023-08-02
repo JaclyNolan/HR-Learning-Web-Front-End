@@ -7,12 +7,12 @@ import { CircularProgress, Typography, Grid, Stack, TextField } from '@mui/mater
 import { useEffect } from 'react';
 import { LoadingButton } from '@mui/lab';
 
-export default function CourseEdit({ fetchList, entryId }) {
+export default function CourseEdit({ fetchList, entry }) {
 
     const [isRetrieving, setRetrieving] = useState(true);
     const [isSubmiting, setSubmiting] = useState(false);
 
-    const [courseId, setCourseId] = useState(entryId);
+    const [courseId, setCourseId] = useState(entry.id);
     const [courseName, setCourseName] = useState('');
     const [courseCategory, setCourseCategory] = useState({});
     const [initialCourseCategory, setInitialCourseCategory] = useState({});
@@ -38,7 +38,7 @@ export default function CourseEdit({ fetchList, entryId }) {
      */
 
     const fetchCourseEditData = async () => {
-        const response = await axiosClient.get(BACKEND_URL.STAFF_COURSE_EDIT_ENDPOINT.concat(`/${entryId}`))
+        const response = await axiosClient.get(BACKEND_URL.STAFF_COURSE_EDIT_ENDPOINT.concat(`/${entry.id}`))
         const { name, description, course_category } = response.data
         setCourseName(name);
         setCourseDescription(description);
@@ -64,14 +64,14 @@ export default function CourseEdit({ fetchList, entryId }) {
         event.preventDefault();
         setSubmiting(true);
         const payload = {
-            id: entryId,
+            id: entry.id,
             name: courseName,
             description: courseDescription,
             course_category_id: courseCategory.value
         }
         console.log(payload);
-        const response = await axiosClient.post(BACKEND_URL.STAFF_COURSE_EDIT_ENDPOINT.concat(`/${entryId}`), newPayload)
-        alert('Edit successfully the course with id: ' + entryId);
+        const response = await axiosClient.post(BACKEND_URL.STAFF_COURSE_EDIT_ENDPOINT.concat(`/${entry.id}`), payload)
+        alert('Edited successfully ' + entry.name);
         fetchList();
         setSubmiting(false);
     }

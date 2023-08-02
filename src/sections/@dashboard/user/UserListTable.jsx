@@ -90,7 +90,7 @@ export default function UserListTable({
     filterName, setFilterName,
     rowsPerPage, setRowsPerPage,
     isFetchingData, setFetchingData,
-    openId, setOpenId,
+    openEntry, setOpenEntry,
     editModalOpen, setEditModalOpen,
     fetchData, setFetchData
   } = useStateData;
@@ -110,19 +110,19 @@ export default function UserListTable({
 
   const handleOpenMenu = (event, id) => {
     setOpen(event.currentTarget);
-    setOpenId(id);
+    setOpenEntry(id);
   };
 
   const handleCloseMenu = () => {
     setOpen(null);
-    setOpenId(null);
+    setOpenEntry(null);
   };
 
   const handleSingleDelete = async () => {
     setOpen(null);
-    setOpenId(null);
-    const response = await deleteEntry(openId);
-    selected.splice(selected.indexOf(openId), 1)
+    setOpenEntry(null);
+    const response = await deleteEntry(openEntry.id);
+    selected.splice(selected.indexOf(openEntry.id), 1)
     refreshTable();
     alert(response.data);
   }
@@ -255,7 +255,7 @@ export default function UserListTable({
 
                         <TableCell align="right">
                           <IconButton size="large" color="inherit" onClick={(event) => {
-                            handleOpenMenu(event, id);
+                            handleOpenMenu(event, row);
                           }}>
                             <Iconify icon={'eva:more-vertical-fill'} />
                           </IconButton>
