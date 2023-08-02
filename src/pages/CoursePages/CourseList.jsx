@@ -24,6 +24,7 @@ export default function CourseList() {
 
     const [addModalOpen, setAddModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
+    const [assignModalOpen, setAssignModalOpen] = useState(false);
 
     const [openId, setOpenId] = useState(null);
 
@@ -66,7 +67,8 @@ export default function CourseList() {
         { id: 'description', label: 'Description', alignRight: false },
         { id: 'course_category.name', label: 'Category', alignRight: false },
         { id: 'created_at', label: 'Created At', alignRight: false, orderable: true },
-        { id: '' }, // Edit & Delete
+        { id: 'assign' },
+        { id: 'actions' }, // Edit & Delete
     ];
 
     const TABLE_ROW = (course) => {
@@ -91,6 +93,10 @@ export default function CourseList() {
             <TableCell align="left">{course.course_category.name}</TableCell>
 
             <TableCell align="left">{course.created_at}</TableCell>
+
+            <TableCell align="left"><Button variant='outlined' onClick={(event) => {
+                handleAssignModalOpen(course.id);
+            }}>Trainees</Button></TableCell>
         </>)
     }
     /** 
@@ -169,7 +175,7 @@ export default function CourseList() {
         return response
     }
 
-    const refreshTable = async (ids) => {
+    const refreshTable = () => {
         if (page === 0)
             fetchCourseData();
         else
@@ -179,6 +185,12 @@ export default function CourseList() {
     const handleAddModalOpen = () => setAddModalOpen(true);
     const handleAddModalClose = () => setAddModalOpen(false);
     const handleEditModalClose = () => setEditModalOpen(false);
+
+    const handleAssignModalOpen = (id) => {
+        setOpenId(id);
+        setAssignModalOpen(true);
+    } 
+    const handleAssignModalClose = () => setAssignModalOpen(false);
 
     useEffect(() => {
         fetchCourseData();
@@ -209,7 +221,7 @@ export default function CourseList() {
                 />
             </Container>
             <Modal
-                key={'add'}
+                key='add'
                 open={addModalOpen}
                 onClose={handleAddModalClose}
                 aria-labelledby="modal-modal-title"
@@ -221,7 +233,7 @@ export default function CourseList() {
             </Modal>
 
             <Modal
-                key={'edit'}
+                key='edit'
                 open={editModalOpen}
                 onClose={handleEditModalClose}
                 aria-labelledby="modal-modal-title"
@@ -229,6 +241,18 @@ export default function CourseList() {
             >
                 <Box sx={style}>
                     <CourseEdit fetchList={fetchCourseData} entryId={openId} />
+                </Box>
+            </Modal>
+
+            <Modal
+                key='assign'
+                open={assignModalOpen}
+                onClose={handleAssignModalClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    
                 </Box>
             </Modal>
         </>

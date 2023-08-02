@@ -149,8 +149,6 @@ export default function UserListTable({
         fetchDataData.splice(indexToRemove, 1);
         setFetchDataData([...fetchDataData]);
       }
-      console.log(selected);
-      console.log(fetchDataData);
 
       if (successfulDelete === selectedLen) {
         refreshTable();
