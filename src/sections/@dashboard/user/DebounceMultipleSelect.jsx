@@ -2,13 +2,13 @@ import { Autocomplete, Box, CircularProgress, Menu, MenuItem, TextField } from '
 import debounce from 'lodash/debounce';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
-function DebounceSelect({ fetchOptions, debounceTimeout = 800, presetOptions = [], ...props }) {
-    const { name, label, value = null, onChange, ...props2 } = props;
+function DebounceSelectForAssign({ fetchOptions, debounceTimeout = 800, presetOptions = [], ...props }) {
+    const { name, label, value = nul, onChange, disableOptions = [], ...props2 } = props;
     const [open, setOpen] = useState(false);
     const [fetching, setFetching] = useState(false);
     const [options, _setOptions] = useState(presetOptions);
     const [autoValue, setAutoValue] = useState(value);
-    const [searchInput, setSearchInput] = useState('');
+    const [inputValue, setInputValue] = useState('');
 
     // console.log(autoValue);
 
@@ -48,9 +48,10 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 800, presetOptions = [
     }, [fetchOptions, debounceTimeout]);
 
     useEffect(() => {
-        debounceFetcher.apply(null, [searchInput])
-    }, [searchInput])
-    // console.log(autoValue);
+        debounceFetcher.apply(null, [inputValue])
+    }, [inputValue])
+    // console.log('value: ', value)
+    // console.log('search value: ', searchInput)
     return (
         <Autocomplete
             filterOptions={(x) => x} //Disable built-in filter/search
@@ -65,18 +66,22 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 800, presetOptions = [
                 setOpen(false);
             }}
             isOptionEqualToValue={(option, value) => option.value === value.value}
-            getOptionLabel={(option) => `${option.value}`}
+            getOptionLabel={(option) => `${option?.value}`}
+            getOptionDisabled={(option) => 
+                Boolean(disableOptions.find((disableOption) => disableOption.id === option.value))
+            }
             value={autoValue}
             onChange={(event, newValue) => {
-                setAutoValue(newValue);
-                setSearchInput('');
+                setAutoValue(null);
+                setInputValue(inputValue);
+                // setInputValue(event.target.inputValue)
                 if (onChange) onChange(newValue);
             }}
             options={options}
             loading={fetching}
+            inputValue={inputValue}
             onInputChange={(event, value) => {
-                if (value != autoValue?.value)
-                    setSearchInput(value);
+                setInputValue(value);
             }}
             renderOption={(props, option) => (
                 <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
@@ -103,4 +108,4 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 800, presetOptions = [
     );
 }
 
-export default DebounceSelect
+export default DebounceSelectForAssign

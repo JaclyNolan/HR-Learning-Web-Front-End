@@ -63,6 +63,8 @@ export default function CourseAdd({ fetchList }) {
     setSubmiting(false);
   }
 
+  console.log(courseCategory);
+
   return (
     <Stack spacing={3}>
       <Typography variant="h6" gutterBottom>

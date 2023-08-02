@@ -5,7 +5,9 @@ const  BACKEND_URL = {
     STAFF_COURSE_INDEX_ENDPOINT: '/staff/courses',
     STAFF_COURSE_ADD_ENDPOINT: '/staff/courses/add',
     STAFF_COURSE_EDIT_ENDPOINT: '/staff/courses/edit',
+    STAFF_COURSE_EDIT_TRAINEE_ENDPOINT: '/staff/courses/edit-trainees',
     STAFF_COURSE_DELETE_ENDPOINT: '/staff/courses/delete',
+    STAFF_TRAINEE_TAKETEN_ENDPOINT: '/staff/trainees/take-ten',
 };
 
 export default BACKEND_URL;

@@ -7,6 +7,7 @@ import Iconify from "../../components/iconify/Iconify";
 import UserListTable from "../../sections/@dashboard/user/UserListTable";
 import CourseAdd from "./CourseAdd";
 import CourseEdit from './CourseEdit';
+import CourseTraineeAssign from "./CourseTraineeAssign";
 
 const style = {
     position: 'absolute',
@@ -20,13 +21,25 @@ const style = {
     p: 4,
 };
 
+const assignStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 660,
+    bgcolor: 'background.paper',
+    border: '0px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
+
 export default function CourseList() {
 
     const [addModalOpen, setAddModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [assignModalOpen, setAssignModalOpen] = useState(false);
 
-    const [openId, setOpenId] = useState(null);
+    const [openEntry, setOpenEntry] = useState(null);
 
     const [page, setPage] = useState(0);
 
@@ -56,7 +69,7 @@ export default function CourseList() {
         filterName, setFilterName,
         rowsPerPage, setRowsPerPage,
         isFetchingData, setFetchingData,
-        openId, setOpenId,
+        openEntry, setOpenEntry,
         editModalOpen, setEditModalOpen,
         fetchData, setFetchData
     }
@@ -94,8 +107,8 @@ export default function CourseList() {
 
             <TableCell align="left">{course.created_at}</TableCell>
 
-            <TableCell align="left"><Button variant='outlined' onClick={(event) => {
-                handleAssignModalOpen(course.id);
+            <TableCell align="left"><Button variant='outlined' onClick={() => {
+                handleAssignModalOpen(course);
             }}>Trainees</Button></TableCell>
         </>)
     }
@@ -186,8 +199,8 @@ export default function CourseList() {
     const handleAddModalClose = () => setAddModalOpen(false);
     const handleEditModalClose = () => setEditModalOpen(false);
 
-    const handleAssignModalOpen = (id) => {
-        setOpenId(id);
+    const handleAssignModalOpen = (entry) => {
+        setOpenEntry(entry);
         setAssignModalOpen(true);
     } 
     const handleAssignModalClose = () => setAssignModalOpen(false);
@@ -240,7 +253,7 @@ export default function CourseList() {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <CourseEdit fetchList={fetchCourseData} entryId={openId} />
+                    <CourseEdit fetchList={fetchCourseData} entry={openEntry} />
                 </Box>
             </Modal>
 
@@ -251,8 +264,8 @@ export default function CourseList() {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box sx={style}>
-                    
+                <Box sx={assignStyle}>
+                    <CourseTraineeAssign fetchList={fetchCourseData} entry={openEntry}/>
                 </Box>
             </Modal>
         </>
