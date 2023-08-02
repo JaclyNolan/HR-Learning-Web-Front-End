@@ -59,7 +59,6 @@ export default function UserAddForm({
         formInputs.forEach((formInput) => {
             payload[formInput.name] = fields[formInput.name];
         })
-        console.log(payload);
         submitFunc(payload, setFetching);
     }
 

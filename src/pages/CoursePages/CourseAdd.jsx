@@ -1,56 +1,20 @@
 import * as React from 'react';
-import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import { UserAddForm } from '../../sections/@dashboard/user';
 import DebounceSelect from './../../sections/@dashboard/user/DebounceSelect';
 import axiosClient from '../../axios-client';
 import BACKEND_URL from './../../url';
 import { useState } from 'react';
-import { Stack } from '@mui/material';
-import { Form } from 'antd';
+import { Stack, Grid } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 
 export default function CourseAdd({ fetchList }) {
 
-  const formInputs = [
-    {
-      type: 'TextField',
-      label: 'Course Name',
-      name: 'name',
-    },
-    // {
-    //   type: 'TextField',
-    //   label: 'Category Id',
-    //   name: 'course_category_id', 
-    // },
-    {
-      type: 'render',
-      label: 'Category Id',
-      name: 'course_category_id',
-      render: () => (<DebounceSelect
-        required
-        name='course_category_id'
-        label="Category Id"
-        placeholder="Select Category"
-        fetchOptions={fetchCourseAddData}
-      />)
-    },
-    {
-      type: 'render',
-      label: 'Description',
-      name: 'description', sm: 12,
-      render: () => (<TextField
-        id='Description'
-        label='Description'
-        fullWidth
-        multiline
-        rows={4}
-        placeholder='Description'
-      />)
-    }
-  ]
+  const [isSubmiting, setSubmiting] = useState(false);
+
+  const [courseName, setCourseName] = useState('');
+  const [courseCategory, setCourseCategory] = useState(null);
+  const [courseDescription, setCourseDescription] = useState('');
 
   /**
    * 
@@ -84,12 +48,19 @@ export default function CourseAdd({ fetchList }) {
     }))
   }
 
-  const addEntry = async (payload, setFetching) => {
-    setFetching(true);
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    setSubmiting(true);
+    const payload = {
+      name: courseName,
+      description: courseDescription,
+      course_category_id: courseCategory.value,
+    }
+    console.log(payload);
     const response = await axiosClient.post(BACKEND_URL.STAFF_COURSE_ADD_ENDPOINT, payload)
     alert('Add successfully!');
     fetchList();
-    setFetching(false);
+    setSubmiting(false);
   }
 
   return (
@@ -97,11 +68,51 @@ export default function CourseAdd({ fetchList }) {
       <Typography variant="h6" gutterBottom>
         Add Course
       </Typography>
-      <UserAddForm
-        buttonLabel={'Add'}
-        formInputs={formInputs}
-        submitFunc={addEntry}
-      />
+      <form onSubmit={handleFormSubmit}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              required
+              fullWidth
+              id='course_name'
+              name='course_name'
+              label='Course Name'
+              value={courseName}
+              onChange={(event) => setCourseName(event.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <DebounceSelect
+              required
+              id='course_category'
+              name='course_category'
+              label="Category Id"
+              placeholder="Select Category"
+              value={courseCategory}
+              onChange={(value) => setCourseCategory(value)}
+              fetchOptions={fetchCourseAddData}
+            />
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <TextField
+              id='course_description'
+              name='course_description'
+              label='Description'
+              value={courseDescription}
+              onChange={(event) => setCourseDescription(event.target.value)}
+              fullWidth
+              multiline
+              rows={4}
+              placeholder='Description'
+            />
+          </Grid>
+          <Grid item sm={6} xs={6}>
+            <LoadingButton loading={isSubmiting} fullWidth size="large" type="submit" variant="contained">
+              Add
+            </LoadingButton>
+          </Grid>
+        </Grid>
+      </form>
     </Stack>
   );
 }
