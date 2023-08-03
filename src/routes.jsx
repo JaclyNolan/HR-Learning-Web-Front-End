@@ -17,6 +17,8 @@ import TrainerCourseList from './pages/TrainerRolePages/TrainerCourseList';
 import TrainerProfile from './pages/TrainerRolePages/TrainerProfile';
 import { CourseCategoryList } from './pages/CourseCategoryPages';
 import { TopicList } from './pages/TopicPages';
+import { TrainerList } from './pages/TrainerPages';
+import { TraineeList } from './pages/TraineePages';
 
 // ----------------------------------------------------------------------
 
@@ -86,8 +88,8 @@ const staffRoutes = [
         children: [
           { element: <Navigate to="/dashboard/app" />, index: true },
           { path: 'app', element: <DashboardAppPage /> },
-          { path: 'trainee', element: <CourseList /> },
-          { path: 'trainer', element: <CourseList /> },
+          { path: 'trainee', element: <TraineeList /> },
+          { path: 'trainer', element: <TrainerList /> },
           { path: 'topic', element: <TopicList /> },
           { path: 'course', element: <CourseList /> },
           { path: 'courseCategory', element: <CourseCategoryList /> },
