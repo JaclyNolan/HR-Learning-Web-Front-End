@@ -20,23 +20,10 @@ const style = {
     p: 4,
 };
 
-const assignStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 660,
-    bgcolor: 'background.paper',
-    border: '0px solid #000',
-    boxShadow: 24,
-    p: 4,
-};
-
 export default function CourseCategoryList() {
 
     const [addModalOpen, setAddModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
-    const [assignModalOpen, setAssignModalOpen] = useState(false);
 
     const [openEntry, setOpenEntry] = useState(null);
 
@@ -78,7 +65,6 @@ export default function CourseCategoryList() {
         { id: 'name', label: 'Name', alignRight: false, orderable: true },
         { id: 'description', label: 'Description', alignRight: false },
         { id: 'created_at', label: 'Created At', alignRight: false, orderable: true },
-        { id: 'assign' },
         { id: 'actions' }, // Edit & Delete
     ];
 
@@ -95,9 +81,6 @@ export default function CourseCategoryList() {
 
             <TableCell align="left">{courseCategory.created_at}</TableCell>
 
-            <TableCell align="left"><Button variant='outlined' onClick={() => {
-                handleAssignModalOpen(courseCategory);
-            }}>Trainees</Button></TableCell>
         </>)
     }
 
@@ -135,12 +118,6 @@ export default function CourseCategoryList() {
     const handleAddModalOpen = () => setAddModalOpen(true);
     const handleAddModalClose = () => setAddModalOpen(false);
     const handleEditModalClose = () => setEditModalOpen(false);
-
-    const handleAssignModalOpen = (entry) => {
-        setOpenEntry(entry);
-        setAssignModalOpen(true);
-    } 
-    const handleAssignModalClose = () => setAssignModalOpen(false);
 
     useEffect(() => {
         fetchCourseCategoryData();
