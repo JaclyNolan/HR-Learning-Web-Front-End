@@ -11,46 +11,46 @@ import DebounceSelectForAssign from './../../sections/@dashboard/user/DebounceMu
 import Iconify from './../../components/iconify/Iconify';
 import GrayBackdrop from '../../components/gray-backdrop';
 
-export default function CourseTraineeAssign({ fetchList, entry }) {
+export default function TopicTrainerAssign({ fetchList, entry }) {
 
     const [isRetrieving, setRetrieving] = useState(true);
     const [isSubmiting, setSubmiting] = useState(false);
     const [isEditMode, setEditMode] = useState(false);
 
-    const [initialTraineeData, _setInitialTraineeData] = useState([]);
-    const [traineeData, _setTraineeData] = useState([]);
+    const [initialTrainerData, _setInitialTrainerData] = useState([]);
+    const [trainerData, _setTrainerData] = useState([]);
 
-    const setInitialTraineeData = (array) => {
-        _setInitialTraineeData([...array]);
+    const setInitialTrainerData = (array) => {
+        _setInitialTrainerData([...array]);
     }
-    const setTraineeData = (array) => {
-        _setTraineeData([...array]);
+    const setTrainerData = (array) => {
+        _setTrainerData([...array]);
     }
 
     useEffect(() => {
-        fetchTraineesByCourse();
+        fetchTrainersByTopic();
     }, [])
 
-    const fetchTenTrainees = async (search) => {
+    const fetchTenTrainers = async (search) => {
         const params = {
             search
         }
-        const response = await axiosClient.get(BACKEND_URL.STAFF_TRAINEE_TAKETEN_ENDPOINT, { params })
-        const trainees = response.data
-        return trainees.map((trainee) => ({
-            ...trainee,
-            value: trainee.id,
-            label: `${trainee.id} ${trainee.name}`,
+        const response = await axiosClient.get(BACKEND_URL.STAFF_TRAINER_TAKETEN_ENDPOINT, { params })
+        const trainers = response.data
+        return trainers.map((trainer) => ({
+            ...trainer,
+            value: trainer.id,
+            label: `${trainer.id} ${trainer.name}`,
         }))
     }
 
-    const fetchTraineesByCourse = async () => {
+    const fetchTrainersByTopic = async () => {
         setRetrieving(true);
-        const response = await axiosClient.get(BACKEND_URL.STAFF_COURSE_EDIT_TRAINEE_ENDPOINT + `/${entry.id}`);
+        const response = await axiosClient.get(BACKEND_URL.STAFF_TOPIC_EDIT_TRAINER_ENDPOINT + `/${entry.id}`);
         console.log(response);
-        const { trainees } = response.data;
-        setInitialTraineeData(trainees);
-        setTraineeData(trainees);
+        const { trainers } = response.data;
+        setInitialTrainerData(trainers);
+        setTrainerData(trainers);
         setRetrieving(false);
     }
 
@@ -58,31 +58,30 @@ export default function CourseTraineeAssign({ fetchList, entry }) {
         event.preventDefault();
         setSubmiting(true);
         const payload = {
-            trainee_ids: traineeData.map((trainee) => trainee.id)
+            trainer_ids: trainerData.map((trainer) => trainer.id)
         }
         console.log('old: ', payload);
-        const response = await axiosClient.post(BACKEND_URL.STAFF_COURSE_EDIT_TRAINEE_ENDPOINT.concat(`/${entry.id}`), payload)
+        const response = await axiosClient.post(BACKEND_URL.STAFF_TOPIC_EDIT_TRAINER_ENDPOINT.concat(`/${entry.id}`), payload)
         setSubmiting(false);
         setEditMode(false);
-        const { trainees } = response.data;
-        console.log('new: ', trainees)
-        setInitialTraineeData(trainees);
-        setTraineeData(trainees);
-        alert('Edited trainees successfully of ' + entry.name);
+        const { trainers } = response.data;
+        console.log('new: ', trainers)
+        setInitialTrainerData(trainers);
+        setTrainerData(trainers);
+        alert('Edited trainers successfully of ' + entry.name);
     }
 
-    const addTraineeToData = (newTrainee) => {
-        // console.log(newTrainee)
-        for (const trainee of traineeData) {
-            if (trainee.id === newTrainee.id) return
+    const addTrainerToData = (newTrainer) => {
+        for (const trainer of trainerData) {
+            if (trainer.id === newTrainer.id) return
         }
-        setTraineeData([newTrainee, ...traineeData]);
+        setTrainerData([newTrainer, ...trainerData]);
     }
 
     const handleDelete = (id) => {
-        const matchingIndex = traineeData.findIndex((trainee) => trainee.id === id)
-        traineeData.splice(matchingIndex, 1);
-        setTraineeData(traineeData);
+        const matchingIndex = trainerData.findIndex((trainer) => trainer.id === id)
+        trainerData.splice(matchingIndex, 1);
+        setTrainerData(trainerData);
     }
 
     const handleEdit = () => {
@@ -91,13 +90,13 @@ export default function CourseTraineeAssign({ fetchList, entry }) {
 
     const handleView = () => {
         setEditMode(false);
-        setTraineeData(initialTraineeData);
+        setTrainerData(initialTrainerData);
     }
 
     return (
         <Stack spacing={3}>
             <Typography variant="h6" gutterBottom>
-                Trainee of {entry.name}
+                Trainers of {entry.name}
             </Typography>
             {isRetrieving
                 ? <CircularProgress />
@@ -106,14 +105,14 @@ export default function CourseTraineeAssign({ fetchList, entry }) {
                         <Grid item xs={12} sm={12}>
                             <div style={{ position: 'relative' }}>
                                 <DebounceSelectForAssign
-                                    id='trainee'
-                                    name='trainee'
-                                    label="Add a new trainee"
-                                    placeholder="Search trainee by name"
+                                    id='trainer'
+                                    name='trainer'
+                                    label="Add a new trainer"
+                                    placeholder="Search trainer by name"
                                     value={null}
-                                    onChange={(value) => addTraineeToData(value)}
-                                    fetchOptions={fetchTenTrainees}
-                                    disableOptions={traineeData}
+                                    onChange={(value) => addTrainerToData(value)}
+                                    fetchOptions={fetchTenTrainers}
+                                    disableOptions={trainerData}
                                 />
                                 <GrayBackdrop open={!isEditMode} style={{ position: 'absolute' }} />
                             </div>
@@ -124,7 +123,7 @@ export default function CourseTraineeAssign({ fetchList, entry }) {
                                 variant="overline" display="block"
                                 gutterBottom
                                 paddingRight={2}>
-                                Total Trainee: {traineeData.length}
+                                Total Trainer: {trainerData.length}
                             </Typography>
 
                             <div style={{ position: 'relative' }}>
@@ -145,17 +144,17 @@ export default function CourseTraineeAssign({ fetchList, entry }) {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {traineeData.map((trainee) => {
-                                                return (<TableRow hover key={trainee.id}>
+                                            {trainerData.map((trainer) => {
+                                                return (<TableRow hover key={trainer.id}>
                                                     <TableCell align='left'>
-                                                        {trainee.id}
+                                                        {trainer.id}
                                                     </TableCell>
                                                     <TableCell align='left'>
-                                                        {trainee.name}
+                                                        {trainer.name}
                                                     </TableCell>
                                                     {isEditMode &&
                                                         <TableCell align='left'>
-                                                            <IconButton onClick={() => { handleDelete(trainee.id) }}>
+                                                            <IconButton onClick={() => { handleDelete(trainer.id) }}>
                                                                 <Iconify icon="eva:trash-2-fill" />
                                                             </IconButton>
                                                         </TableCell>
