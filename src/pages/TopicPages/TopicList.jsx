@@ -7,6 +7,7 @@ import Iconify from "../../components/iconify/Iconify";
 import UserListTable from "../../sections/@dashboard/user/UserListTable";
 import TopicAdd from "./TopicAdd";
 import TopicEdit from './TopicEdit';
+import TopicTrainerAssign from './TopicTrainerAssign';
 
 const style = {
     position: 'absolute',
@@ -99,7 +100,7 @@ export default function TopicList() {
 
             <TableCell align="left"><Button variant='outlined' onClick={() => {
                 handleAssignModalOpen(topic);
-            }}>Trainees</Button></TableCell>
+            }}>Trainers</Button></TableCell>
         </>)
     }
 
@@ -141,7 +142,7 @@ export default function TopicList() {
     const handleAssignModalOpen = (entry) => {
         setOpenEntry(entry);
         setAssignModalOpen(true);
-    } 
+    }
     const handleAssignModalClose = () => setAssignModalOpen(false);
 
     useEffect(() => {
@@ -157,7 +158,7 @@ export default function TopicList() {
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>
-                    Topic Management
+                        Topic Management
                     </Typography>
                     <Button onClick={handleAddModalOpen} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
                         New Topic
@@ -196,6 +197,17 @@ export default function TopicList() {
                 </Box>
             </Modal>
 
+            <Modal
+                key='assign'
+                open={assignModalOpen}
+                onClose={handleAssignModalClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={assignStyle}>
+                    <TopicTrainerAssign fetchList={fetchTopicData} entry={openEntry} />
+                </Box>
+            </Modal>
         </>
     );
 }
