@@ -25,6 +25,16 @@ const  BACKEND_URL = {
     STAFF_TOPIC_EDIT_ENDPOINT: '/staff/topics/edit',
     STAFF_TOPIC_EDIT_TRAINER_ENDPOINT: '/staff/topics/edit-trainers',
     STAFF_TOPIC_DELETE_ENDPOINT: '/staff/topics/delete',
+    // staff trainer
+    STAFF_TRAINER_INDEX_ENDPOINT: '/staff/trainers',
+    STAFF_TRAINER_ADD_ENDPOINT: '/staff/trainers/add',
+    STAFF_TRAINER_EDIT_ENDPOINT: '/staff/trainers/edit',
+    STAFF_TRAINER_DELETE_ENDPOINT: '/staff/trainers/delete',
+    // staff trainee
+    STAFF_TRAINEE_INDEX_ENDPOINT: '/staff/trainees',
+    STAFF_TRAINEE_ADD_ENDPOINT: '/staff/trainees/add',
+    STAFF_TRAINEE_EDIT_ENDPOINT: '/staff/trainees/edit',
+    STAFF_TRAINEE_DELETE_ENDPOINT: '/staff/trainees/delete',
 };
 
 export default BACKEND_URL;

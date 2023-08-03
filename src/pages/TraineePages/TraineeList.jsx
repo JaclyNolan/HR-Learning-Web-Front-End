@@ -5,9 +5,8 @@ import BACKEND_URL from "../../url";
 import axiosClient from "../../axios-client";
 import Iconify from "../../components/iconify/Iconify";
 import UserListTable from "../../sections/@dashboard/user/UserListTable";
-import TopicAdd from "./TopicAdd";
-import TopicEdit from './TopicEdit';
-import TopicTrainerAssign from './TopicTrainerAssign';
+import TraineeAdd from "./TraineeAdd";
+import TraineeEdit from './TraineeEdit';
 
 const style = {
     position: 'absolute',
@@ -33,7 +32,7 @@ const assignStyle = {
     p: 4,
 };
 
-export default function TopicList() {
+export default function TraineeList() {
 
     const [addModalOpen, setAddModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
@@ -57,7 +56,7 @@ export default function TopicList() {
 
     const [isFetchingData, setFetchingData] = useState(true);
 
-    const searchText = 'Search topic by name...';
+    const searchText = 'Search trainee by name...';
 
     const fetchRef = useRef(0);
 
@@ -77,83 +76,39 @@ export default function TopicList() {
     const TABLE_HEAD = [
         { id: 'id', label: "Id", alignRight: false, orderable: true },
         { id: 'name', label: 'Name', alignRight: false, orderable: true },
-        { id: 'description', label: 'Description', alignRight: false },
+        { id: 'account', label: 'Account', alignRight: false },
+        { id: 'age', label: 'age', alignRight: false },
+        { id: 'date_of_birth', label: 'Dob', alignRight: false },
+        { id: 'education', label: 'Education', alignRight: false },
+        { id: 'main_programming_language', label: 'Main', alignRight: false },
+        { id: 'toeic_score', label: 'Toeic Score', alignRight: false },
+        { id: 'department', label: 'Department', alignRight: false },
+        { id: 'location', label: 'Location', alignRight: false },
         { id: 'created_at', label: 'Created At', alignRight: false, orderable: true },
         { id: 'assign' },
         { id: 'actions' }, // Edit & Delete
     ];
 
-    const TABLE_ROW = (topic) => {
+    const TABLE_ROW = (trainee) => {
         return (<>
-            <TableCell align="left">{topic.id}</TableCell>
+            <TableCell align="left">{trainee.id}</TableCell>
 
             <TableCell align="left"><Typography variant="subtitle2" noWrap>
-                {topic.name}
+                {trainee.name}
             </Typography></TableCell>
 
-            <TableCell align="left">{topic.description}</TableCell>
-
-
-            <TableCell align="left">{topic.created_at}</TableCell>
-
-            <TableCell align="left"><Button variant='outlined' onClick={() => {
-                handleAssignModalOpen(topic);
-            }}>Trainers</Button></TableCell>
+            <TableCell align="left">{trainee.account}</TableCell>
+            <TableCell align="left">{trainee.age}</TableCell>
+            <TableCell align="left">{trainee.date_of_birth}</TableCell>
+            <TableCell align="left">{trainee.education}</TableCell>
+            <TableCell align="left">{trainee.main_programming_language}</TableCell>
+            <TableCell align="left">{trainee.toeic_score}</TableCell>
+            <TableCell align="left">{trainee.department}</TableCell>
+            <TableCell align="left">{trainee.location}</TableCell>
+            <TableCell align="left">{trainee.created_at}</TableCell>
         </>)
     }
-    /** 
-   * @fetchData =  {
-    "current_page": 1,
-    "data": [
-        {
-            "id": 2,
-            "name": "autem",
-            "description": "Aspernatur dolore omnis rerum. Aperiam voluptatem debitis sit commodi. Corporis et mollitia labore inventore molestias.",
-            "created_at": "2023-07-25T06:56:19.000000Z",
-            "updated_at": "2023-07-25T06:56:19.000000Z",
-            "deleted_at": null,
-            "course_category_id": 1,
-            "course_category": {
-                "id": 1,
-                "name": "dolores"
-            }
-        },
-        ],
-    "first_page_url": "http://127.0.0.1/api/staff/courses?page=1",
-    "from": 1,
-    "last_page": 2,
-    "last_page_url": "http://127.0.0.1/api/staff/courses?page=2",
-    "links": [
-        {
-            "url": null,
-            "label": "&laquo; Previous",
-            "active": false
-        },
-        {
-            "url": "http://127.0.0.1/api/staff/courses?page=1",
-            "label": "1",
-            "active": true
-        },
-        {
-            "url": "http://127.0.0.1/api/staff/courses?page=2",
-            "label": "2",
-            "active": false
-        },
-        {
-            "url": "http://127.0.0.1/api/staff/courses?page=2",
-            "label": "Next &raquo;",
-            "active": false
-        }
-    ],
-    "next_page_url": "http://127.0.0.1/api/staff/courses?page=2",
-    "path": "http://127.0.0.1/api/staff/courses",
-    "per_page": 10,
-    "prev_page_url": null,
-    "to": 10,
-    "total": 15
-}
-   * */
-    const fetchTopicData = async () => {
+    const fetchTraineeData = async () => {
         setFetchingData(true)
         const pagePlusOne = page + 1;
         const params = {
@@ -165,21 +120,21 @@ export default function TopicList() {
         }
         fetchRef.current += 1;
         const fetchId = fetchRef.current;
-        const response = await axiosClient.get(BACKEND_URL.STAFF_TOPIC_INDEX_ENDPOINT, { params })
+        const response = await axiosClient.get(BACKEND_URL.STAFF_TRAINEE_INDEX_ENDPOINT, { params })
         if (fetchId !== fetchRef.current) return
         setFetchData(response.data);
         setFetchingData(false);
     }
 
-    const deleteTopic = async (id) => {
+    const deleteTrainee = async (id) => {
         setFetchingData(true);
-        const response = await axiosClient.delete(BACKEND_URL.STAFF_TOPIC_DELETE_ENDPOINT.concat(`/${id}`));
+        const response = await axiosClient.delete(BACKEND_URL.STAFF_TRAINEE_DELETE_ENDPOINT.concat(`/${id}`));
         return response
     }
 
     const refreshTable = () => {
         if (page === 0)
-            fetchTopicData();
+            fetchTraineeData();
         else
             setPage(0);
     }
@@ -191,26 +146,26 @@ export default function TopicList() {
     const handleAssignModalOpen = (entry) => {
         setOpenEntry(entry);
         setAssignModalOpen(true);
-    }
+    } 
     const handleAssignModalClose = () => setAssignModalOpen(false);
 
     useEffect(() => {
-        fetchTopicData();
+        fetchTraineeData();
     }, [page, orderBy, order, filterName, rowsPerPage])
 
     return (
         <>
             <Helmet>
-                <title> Topic Management </title>
+                <title> Trainee Management </title>
             </Helmet>
 
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>
-                        Topic Management
+                    Trainee Management
                     </Typography>
                     <Button onClick={handleAddModalOpen} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-                        New Topic
+                        New Trainee
                     </Button>
                 </Stack>
                 <UserListTable
@@ -218,7 +173,7 @@ export default function TopicList() {
                     TABLE_ROW={TABLE_ROW}
                     useStateData={useStateData}
                     searchText={searchText}
-                    deleteEntry={deleteTopic}
+                    deleteEntry={deleteTrainee}
                     refreshTable={refreshTable}
                 />
             </Container>
@@ -230,7 +185,7 @@ export default function TopicList() {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <TopicAdd fetchList={fetchTopicData} />
+                    <TraineeAdd fetchList={fetchTraineeData} />
                 </Box>
             </Modal>
 
@@ -242,21 +197,10 @@ export default function TopicList() {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <TopicEdit fetchList={fetchTopicData} entry={openEntry} />
+                    <TraineeEdit fetchList={fetchTraineeData} entry={openEntry} />
                 </Box>
             </Modal>
 
-            <Modal
-                key='assign'
-                open={assignModalOpen}
-                onClose={handleAssignModalClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box sx={assignStyle}>
-                    <TopicTrainerAssign fetchList={fetchTopicData} entry={openEntry} />
-                </Box>
-            </Modal>
         </>
     );
 }
