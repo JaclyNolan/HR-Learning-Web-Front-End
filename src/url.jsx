@@ -10,6 +10,11 @@ const  BACKEND_URL = {
     STAFF_TRAINEE_TAKETEN_ENDPOINT: '/staff/trainees/take-ten',
     TRAINER_COURSE_INDEX_ENDPOINT: '/trainer/courses',
     TRAINER_PROFILE_ENDPOINT: '/trainer/profile',
+    // staff Course Category
+    STAFF_COURSE_CATEGORY_INDEX_ENDPOINT: '/staff/courseCategories',
+    STAFF_COURSE_CATEGORY_ADD_ENDPOINT: '/staff/courseCategories/add',
+    STAFF_COURSE_CATEGORY_EDIT_ENDPOINT: '/staff/courseCategories/edit',
+    STAFF_COURSE_CATEGORY_DELETE_ENDPOINT: '/staff/courseCategories/delete',
 };
 
 export default BACKEND_URL;
