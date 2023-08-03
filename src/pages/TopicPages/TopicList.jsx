@@ -78,7 +78,6 @@ export default function TopicList() {
         { id: 'id', label: "Id", alignRight: false, orderable: true },
         { id: 'name', label: 'Name', alignRight: false, orderable: true },
         { id: 'description', label: 'Description', alignRight: false },
-        { id: 'course.name', label: 'Course', alignRight: false },
         { id: 'created_at', label: 'Created At', alignRight: false, orderable: true },
         { id: 'assign' },
         { id: 'actions' }, // Edit & Delete
@@ -94,7 +93,6 @@ export default function TopicList() {
 
             <TableCell align="left">{topic.description}</TableCell>
 
-            <TableCell align="left">{topic.course.name}</TableCell>
 
             <TableCell align="left">{topic.created_at}</TableCell>
 
@@ -103,7 +101,58 @@ export default function TopicList() {
             }}>Trainers</Button></TableCell>
         </>)
     }
-
+    /** 
+   * @fetchData =  {
+    "current_page": 1,
+    "data": [
+        {
+            "id": 2,
+            "name": "autem",
+            "description": "Aspernatur dolore omnis rerum. Aperiam voluptatem debitis sit commodi. Corporis et mollitia labore inventore molestias.",
+            "created_at": "2023-07-25T06:56:19.000000Z",
+            "updated_at": "2023-07-25T06:56:19.000000Z",
+            "deleted_at": null,
+            "course_category_id": 1,
+            "course_category": {
+                "id": 1,
+                "name": "dolores"
+            }
+        },
+        ],
+    "first_page_url": "http://127.0.0.1/api/staff/courses?page=1",
+    "from": 1,
+    "last_page": 2,
+    "last_page_url": "http://127.0.0.1/api/staff/courses?page=2",
+    "links": [
+        {
+            "url": null,
+            "label": "&laquo; Previous",
+            "active": false
+        },
+        {
+            "url": "http://127.0.0.1/api/staff/courses?page=1",
+            "label": "1",
+            "active": true
+        },
+        {
+            "url": "http://127.0.0.1/api/staff/courses?page=2",
+            "label": "2",
+            "active": false
+        },
+        {
+            "url": "http://127.0.0.1/api/staff/courses?page=2",
+            "label": "Next &raquo;",
+            "active": false
+        }
+    ],
+    "next_page_url": "http://127.0.0.1/api/staff/courses?page=2",
+    "path": "http://127.0.0.1/api/staff/courses",
+    "per_page": 10,
+    "prev_page_url": null,
+    "to": 10,
+    "total": 15
+}
+   * */
     const fetchTopicData = async () => {
         setFetchingData(true)
         const pagePlusOne = page + 1;
