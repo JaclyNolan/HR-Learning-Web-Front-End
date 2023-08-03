@@ -72,6 +72,11 @@ export const staffNavConfig = [
 ]
 export const trainerNavConfig = [
   {
+    title: 'Profile',
+    path: '/profile',
+    icon: icon('ic_user'),
+  },
+  {
     title: 'Course',
     path: '/course',
     icon: icon('ic_course'),
