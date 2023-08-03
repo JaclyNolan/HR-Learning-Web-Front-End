@@ -58,7 +58,8 @@ export default function CourseAdd({ fetchList }) {
     }
     console.log(payload);
     const response = await axiosClient.post(BACKEND_URL.STAFF_COURSE_ADD_ENDPOINT, payload)
-    alert('Add successfully!');
+    const course = response.data;
+    alert('Add successfully id: ' + course.id + ' name: ' + course.name);
     fetchList();
     setSubmiting(false);
   }
