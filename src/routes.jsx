@@ -13,6 +13,8 @@ import RequireGuest from './HOC/RequireGuest';
 import Unauthorized from './pages/Unauthorized';
 import useAuth from './hooks/useAuth';
 import { CourseList } from './pages/CoursePages';
+import TrainerCourseList from './pages/TrainerRolePages/TrainerCourseList';
+import TrainerProfile from './pages/TrainerRolePages/TrainerProfile';
 
 // ----------------------------------------------------------------------
 
@@ -44,7 +46,7 @@ const commonRoutes = [
 
 const guestRoutes = [
   {
-    element: <RequireAuth/>,
+    element: <RequireAuth />,
     children: [
       { element: <Navigate to="/login" />, index: true },
     ]
@@ -101,9 +103,9 @@ const trainerRoutes = [
       {
         element: <AdminLayout />,
         children: [
-          { path: '/', element: <CourseList /> },
-          { path: '/course', element: <p>Course</p> },
-          { path: '/nothing', element: <></> }
+          { path: '/', element: <Navigate to={'/course'} /> },
+          { path: '/course', element: <TrainerCourseList /> },
+          { path: '/profile', element: <TrainerProfile /> },
         ]
       }
     ]
@@ -112,7 +114,7 @@ const trainerRoutes = [
 ]
 
 const findRouter = (role) => {
-  switch (role){
+  switch (role) {
     case "admin":
       return adminRoutes
     case "staff":
