@@ -15,6 +15,8 @@ import useAuth from './hooks/useAuth';
 import { CourseList } from './pages/CoursePages';
 import TrainerCourseList from './pages/TrainerRolePages/TrainerCourseList';
 import TrainerProfile from './pages/TrainerRolePages/TrainerProfile';
+import { CourseCategoryList } from './pages/CourseCategoryPages';
+import { TopicList } from './pages/TopicPages';
 
 // ----------------------------------------------------------------------
 
@@ -86,9 +88,9 @@ const staffRoutes = [
           { path: 'app', element: <DashboardAppPage /> },
           { path: 'trainee', element: <CourseList /> },
           { path: 'trainer', element: <CourseList /> },
-          { path: 'topic', element: <CourseList /> },
+          { path: 'topic', element: <TopicList /> },
           { path: 'course', element: <CourseList /> },
-          { path: 'courseCategory', element: <CourseList /> },
+          { path: 'courseCategory', element: <CourseCategoryList /> },
         ],
       },
     ]

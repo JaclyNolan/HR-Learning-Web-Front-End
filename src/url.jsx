@@ -10,6 +10,16 @@ const  BACKEND_URL = {
     STAFF_TRAINEE_TAKETEN_ENDPOINT: '/staff/trainees/take-ten',
     TRAINER_COURSE_INDEX_ENDPOINT: '/trainer/courses',
     TRAINER_PROFILE_ENDPOINT: '/trainer/profile',
+    // staff Course Category
+    STAFF_COURSE_CATEGORY_INDEX_ENDPOINT: '/staff/courseCategories',
+    STAFF_COURSE_CATEGORY_ADD_ENDPOINT: '/staff/courseCategories/add',
+    STAFF_COURSE_CATEGORY_EDIT_ENDPOINT: '/staff/courseCategories/edit',
+    STAFF_COURSE_CATEGORY_DELETE_ENDPOINT: '/staff/courseCategories/delete',
+    // staff topic
+    STAFF_TOPIC_INDEX_ENDPOINT: '/staff/topics',
+    STAFF_TOPIC_ADD_ENDPOINT: '/staff/topics/add',
+    STAFF_TOPIC_EDIT_ENDPOINT: '/staff/topics/edit',
+    STAFF_TOPIC_DELETE_ENDPOINT: '/staff/topics/delete',
 };
 
 export default BACKEND_URL;
