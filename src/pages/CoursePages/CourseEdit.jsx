@@ -71,7 +71,8 @@ export default function CourseEdit({ fetchList, entry }) {
         }
         console.log(payload);
         const response = await axiosClient.post(BACKEND_URL.STAFF_COURSE_EDIT_ENDPOINT.concat(`/${entry.id}`), payload)
-        alert('Edited successfully ' + entry.name);
+        const course = response.data;
+        alert('Edited successfully ' + course.name);
         fetchList();
         setSubmiting(false);
     }
