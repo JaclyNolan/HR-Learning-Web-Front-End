@@ -79,7 +79,7 @@ export default function TraineeList() {
         { id: 'name', label: 'Name', alignRight: false, orderable: true },
         { id: 'account', label: 'Account', alignRight: false },
         { id: 'age', label: 'Age', alignRight: false, orderable: true },
-        { id: 'date_of_birth', label: 'Dob', alignRight: false, orderable: true },
+        { id: 'date_of_birth', label: 'Dob', alignRight: false, orderable: true, sx: {minWidth: 50} },
         { id: 'education', label: 'Education', alignRight: false },
         { id: 'main_programming_language', label: 'Main', alignRight: false },
         { id: 'toeic_score', label: 'Toeic Score', alignRight: false, orderable: true },
@@ -99,7 +99,7 @@ export default function TraineeList() {
 
             <TableCell align="left">{trainee.account}</TableCell>
             <TableCell align="left">{trainee.age}</TableCell>
-            <TableCell align="left" sx={{ width: 50 }}>
+            <TableCell align="left">
                 {dayjs(trainee.date_of_birth).format('DD/MM/YYYY').toString()}
             </TableCell>
             <TableCell align="left">{trainee.education}</TableCell>
