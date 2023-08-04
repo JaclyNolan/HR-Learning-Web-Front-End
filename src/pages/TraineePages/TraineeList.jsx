@@ -7,6 +7,7 @@ import Iconify from "../../components/iconify/Iconify";
 import UserListTable from "../../sections/@dashboard/user/UserListTable";
 import TraineeAdd from "./TraineeAdd";
 import TraineeEdit from './TraineeEdit';
+import dayjs from "dayjs";
 
 const style = {
     position: 'absolute',
@@ -77,15 +78,14 @@ export default function TraineeList() {
         { id: 'id', label: "Id", alignRight: false, orderable: true },
         { id: 'name', label: 'Name', alignRight: false, orderable: true },
         { id: 'account', label: 'Account', alignRight: false },
-        { id: 'age', label: 'age', alignRight: false },
-        { id: 'date_of_birth', label: 'Dob', alignRight: false },
+        { id: 'age', label: 'Age', alignRight: false, orderable: true },
+        { id: 'date_of_birth', label: 'Dob', alignRight: false, orderable: true },
         { id: 'education', label: 'Education', alignRight: false },
         { id: 'main_programming_language', label: 'Main', alignRight: false },
-        { id: 'toeic_score', label: 'Toeic Score', alignRight: false },
+        { id: 'toeic_score', label: 'Toeic Score', alignRight: false, orderable: true },
         { id: 'department', label: 'Department', alignRight: false },
         { id: 'location', label: 'Location', alignRight: false },
         { id: 'created_at', label: 'Created At', alignRight: false, orderable: true },
-        { id: 'assign' },
         { id: 'actions' }, // Edit & Delete
     ];
 
@@ -99,7 +99,9 @@ export default function TraineeList() {
 
             <TableCell align="left">{trainee.account}</TableCell>
             <TableCell align="left">{trainee.age}</TableCell>
-            <TableCell align="left">{trainee.date_of_birth}</TableCell>
+            <TableCell align="left" sx={{ width: 50 }}>
+                {dayjs(trainee.date_of_birth).format('DD/MM/YYYY').toString()}
+            </TableCell>
             <TableCell align="left">{trainee.education}</TableCell>
             <TableCell align="left">{trainee.main_programming_language}</TableCell>
             <TableCell align="left">{trainee.toeic_score}</TableCell>
@@ -146,7 +148,7 @@ export default function TraineeList() {
     const handleAssignModalOpen = (entry) => {
         setOpenEntry(entry);
         setAssignModalOpen(true);
-    } 
+    }
     const handleAssignModalClose = () => setAssignModalOpen(false);
 
     useEffect(() => {
@@ -162,7 +164,7 @@ export default function TraineeList() {
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>
-                    Trainee Management
+                        Trainee Management
                     </Typography>
                     <Button onClick={handleAddModalOpen} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
                         New Trainee
