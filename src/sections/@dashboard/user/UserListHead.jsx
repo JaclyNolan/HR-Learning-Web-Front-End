@@ -49,25 +49,29 @@ export default function UserListHead({
             onChange={onSelectAllClick}
           />
         </TableCell>
-        {headLabel.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.alignRight ? 'right' : 'left'}
-            sortDirection={orderBy === headCell.id ? order : false}
+        {headLabel.map((headCell) => {
+          const { id, label, alignRight, orderable, ...props } = headCell;
+          return (<TableCell
+            {...props}
+            key={id}
+            align={alignRight ? 'right' : 'left'}
+            sortDirection={orderBy === id ? order : false}
           >
             <TableSortLabel
               hideSortIcon
-              active={headCell.orderable}
-              direction={orderBy === headCell.id ? order : 'asc'}
+              active={orderable}
+              direction={orderBy === id ? order : 'asc'}
               onClick={createSortHandler(headCell)}
             >
-              {headCell.label}
+              {label}
               {orderBy === headCell.id ? (
                 <Box sx={{ ...visuallyHidden }}>{order === 'desc' ? 'sorted descending' : 'sorted ascending'}</Box>
               ) : null}
             </TableSortLabel>
           </TableCell>
-        ))}
+          )
+        })
+        }
       </TableRow>
     </TableHead>
   );

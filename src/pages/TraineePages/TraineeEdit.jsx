@@ -6,6 +6,8 @@ import { useState } from 'react';
 import { CircularProgress, Typography, Grid, Stack, TextField } from '@mui/material';
 import { useEffect } from 'react';
 import { LoadingButton } from '@mui/lab';
+import dayjs from 'dayjs';
+import { DatePicker } from '@mui/x-date-pickers';
 
 export default function TraineeEdit({ fetchList, entry }) {
 
@@ -17,7 +19,7 @@ export default function TraineeEdit({ fetchList, entry }) {
 
     const [traineeAccount, setTraineeAccount] = useState('');
     const [traineeAge, setTraineeAge] = useState('');
-    const [traineeDateOfBirth, setTraineeDateOfBirth] = useState('');
+    const [traineeDateOfBirth, setTraineeDateOfBirth] = useState(dayjs());
     const [traineeEducation, setTraineeEducation] = useState('');
     const [traineeMain, setTraineeMain] = useState('');
     const [traineeDepartment, setTraineeDepartment] = useState('');
@@ -31,7 +33,7 @@ export default function TraineeEdit({ fetchList, entry }) {
         setTraineeAccount(account);
         setTraineeAge(age);
         setTraineeEducation(education);
-        setTraineeDateOfBirth(date_of_birth);
+        setTraineeDateOfBirth(dayjs(date_of_birth));
         setTraineeMain(main_programming_language);
         setTraineeDepartment(department);
         setTraineeToeicScore(toeic_score);
@@ -48,7 +50,7 @@ export default function TraineeEdit({ fetchList, entry }) {
             account: traineeAccount,
             age: traineeAge,
             education: traineeEducation,
-            date_of_birth: traineeDateOfBirth,
+            date_of_birth: traineeDateOfBirth.format("YYYY-MM-DD").toString(),
             main_programming_language: traineeMain,
             department: traineeDepartment,
             toeic_score: traineeToeicScore,
@@ -76,10 +78,10 @@ export default function TraineeEdit({ fetchList, entry }) {
                 ? <CircularProgress />
                 : <form onSubmit={handleFormSubmit}>
                     <Grid container spacing={3}>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={12}>
                             <TextField
                                 required
-                                fullWidth
+                                sx={{width: 100}}
                                 disabled
                                 id='trainee_id'
                                 name='trainee_id'
@@ -109,7 +111,7 @@ export default function TraineeEdit({ fetchList, entry }) {
                                 onChange={(event) => setTraineeAccount(event.target.value)}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={4}>
                             <TextField
                                 required
                                 fullWidth
@@ -120,19 +122,20 @@ export default function TraineeEdit({ fetchList, entry }) {
                                 onChange={(event) => setTraineeAge(event.target.value)}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
+                        <Grid item xs={12} sm={8}>
+                            <DatePicker
                                 required
                                 fullWidth
                                 id='date_of_birth'
                                 name='date_of_birth'
-                                label='DOB'
+                                label='Birthday'
+                                format='DD/MM/YYYY'
                                 value={traineeDateOfBirth}
-                                onChange={(event) => setTraineeDateOfBirth(event.target.value)}
+                                onChange={(value) => setTraineeDateOfBirth(value)}
                             />
                         </Grid>
 
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={12}>
                             <TextField
                                 required
                                 fullWidth
@@ -168,7 +171,7 @@ export default function TraineeEdit({ fetchList, entry }) {
                             />
                         </Grid>
 
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={12}>
                             <TextField
                                 required
                                 fullWidth
@@ -180,7 +183,7 @@ export default function TraineeEdit({ fetchList, entry }) {
                             />
                         </Grid>
 
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={12}>
                             <TextField
                                 required
                                 fullWidth

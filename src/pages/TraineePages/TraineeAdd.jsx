@@ -7,6 +7,8 @@ import BACKEND_URL from '../../url';
 import { useState } from 'react';
 import { Stack, Grid } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import dayjs from 'dayjs';
+import { DatePicker } from '@mui/x-date-pickers';
 
 export default function TraineeAdd({ fetchList }) {
 
@@ -15,7 +17,7 @@ export default function TraineeAdd({ fetchList }) {
   const [traineeName, setTraineeName] = useState('');
   const [traineeAccount, setTraineeAccount] = useState('');
   const [traineeAge, setTraineeAge] = useState('');
-  const [traineeDateOfBirth, setTraineeDateOfBirth] = useState('');
+  const [traineeDateOfBirth, setTraineeDateOfBirth] = useState(dayjs());
   const [traineeEducation, setTraineeEducation] = useState('');
   const [traineeMain, setTraineeMain] = useState('');
   const [traineeDepartment, setTraineeDepartment] = useState('');
@@ -29,7 +31,7 @@ export default function TraineeAdd({ fetchList }) {
       name: traineeName,
       account: traineeAccount,
       age: traineeAge,
-      date_of_birth: traineeDateOfBirth,
+      date_of_birth: traineeDateOfBirth.format("YYYY-MM-DD").toString(),
       education: traineeEducation,
       main_programming_language: traineeMain,
       department: traineeDepartment,
@@ -51,7 +53,7 @@ export default function TraineeAdd({ fetchList }) {
       </Typography>
       <form onSubmit={handleFormSubmit}>
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6}>
             <TextField
               required
               fullWidth
@@ -62,7 +64,7 @@ export default function TraineeAdd({ fetchList }) {
               onChange={(event) => setTraineeName(event.target.value)}
             />
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6}>
             <TextField
               required
               fullWidth
@@ -86,19 +88,20 @@ export default function TraineeAdd({ fetchList }) {
             />
           </Grid>
 
-          <Grid item xs={12} sm={4}>
-            <TextField
+          <Grid item xs={12} sm={8}>
+            <DatePicker
               required
               fullWidth
-              id='traineeDateOfBirth'
-              name='traineeDateOfBirth'
-              label='Trainee DOB'
+              id='date_of_birth'
+              name='date_of_birth'
+              label='Birthday'
+              format='DD/MM/YYYY'
               value={traineeDateOfBirth}
-              onChange={(event) => setTraineeDateOfBirth(event.target.value)}
+              onChange={(value) => setTraineeDateOfBirth(value)}
             />
           </Grid>
 
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={12}>
             <TextField
               required
               fullWidth
@@ -110,7 +113,7 @@ export default function TraineeAdd({ fetchList }) {
             />
           </Grid>
 
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={12}>
             <TextField
               required
               fullWidth
@@ -122,7 +125,7 @@ export default function TraineeAdd({ fetchList }) {
             />
           </Grid>
 
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={12}>
             <TextField
               required
               fullWidth
@@ -146,7 +149,7 @@ export default function TraineeAdd({ fetchList }) {
             />
           </Grid>
 
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={8}>
             <TextField
               required
               fullWidth

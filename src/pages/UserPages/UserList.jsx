@@ -5,9 +5,8 @@ import BACKEND_URL from "../../url";
 import axiosClient from "../../axios-client";
 import Iconify from "../../components/iconify/Iconify";
 import UserListTable from "../../sections/@dashboard/user/UserListTable";
-import TraineeAdd from "./TraineeAdd";
-import TraineeEdit from './TraineeEdit';
-import dayjs from "dayjs";
+import UserAdd from "./UserAdd";
+import UserEdit from './UserEdit';
 
 const style = {
     position: 'absolute',
@@ -21,23 +20,10 @@ const style = {
     p: 4,
 };
 
-const assignStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 660,
-    bgcolor: 'background.paper',
-    border: '0px solid #000',
-    boxShadow: 24,
-    p: 4,
-};
-
-export default function TraineeList() {
+export default function UserList() {
 
     const [addModalOpen, setAddModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
-    const [assignModalOpen, setAssignModalOpen] = useState(false);
 
     const [openEntry, setOpenEntry] = useState(null);
 
@@ -57,7 +43,7 @@ export default function TraineeList() {
 
     const [isFetchingData, setFetchingData] = useState(true);
 
-    const searchText = 'Search trainee by name...';
+    const searchText = 'Search user by name...';
 
     const fetchRef = useRef(0);
 
@@ -74,43 +60,46 @@ export default function TraineeList() {
         fetchData, setFetchData
     }
 
+    const getRoleName = (role_id) => {
+        if (role_id === 1) {
+          return 'Admin';
+        } else if (role_id === 2) {
+          return 'Staff';
+        } else if (role_id === 3) {
+          return 'Trainer';
+        } else {
+          return 'Unknown';
+        }
+      };
+
     const TABLE_HEAD = [
         { id: 'id', label: "Id", alignRight: false, orderable: true },
         { id: 'name', label: 'Name', alignRight: false, orderable: true },
-        { id: 'account', label: 'Account', alignRight: false },
-        { id: 'age', label: 'Age', alignRight: false, orderable: true },
-        { id: 'date_of_birth', label: 'Dob', alignRight: false, orderable: true, sx: {minWidth: 50} },
-        { id: 'education', label: 'Education', alignRight: false },
-        { id: 'main_programming_language', label: 'Main', alignRight: false },
-        { id: 'toeic_score', label: 'Toeic Score', alignRight: false, orderable: true },
-        { id: 'department', label: 'Department', alignRight: false },
-        { id: 'location', label: 'Location', alignRight: false },
+        { id: 'email', label: 'Email', alignRight: false,},
+        { id: 'role_id', label: 'Role', alignRight: false,},
+        //{ id: 'trainer.name', label: 'Trainer', alignRight: false },
         { id: 'created_at', label: 'Created At', alignRight: false, orderable: true },
         { id: 'actions' }, // Edit & Delete
     ];
 
-    const TABLE_ROW = (trainee) => {
+    const TABLE_ROW = (user) => {
         return (<>
-            <TableCell align="left">{trainee.id}</TableCell>
+            <TableCell align="left">{user.id}</TableCell>
+
 
             <TableCell align="left"><Typography variant="subtitle2" noWrap>
-                {trainee.name}
+                {user.name}
             </Typography></TableCell>
+            <TableCell align="left">{user.email}</TableCell>
+            <TableCell align="left">{getRoleName(user.role_id)}</TableCell>
+            {/* <TableCell align="left">{user.trainer.name}</TableCell> */}
 
-            <TableCell align="left">{trainee.account}</TableCell>
-            <TableCell align="left">{trainee.age}</TableCell>
-            <TableCell align="left">
-                {dayjs(trainee.date_of_birth).format('DD/MM/YYYY').toString()}
-            </TableCell>
-            <TableCell align="left">{trainee.education}</TableCell>
-            <TableCell align="left">{trainee.main_programming_language}</TableCell>
-            <TableCell align="left">{trainee.toeic_score}</TableCell>
-            <TableCell align="left">{trainee.department}</TableCell>
-            <TableCell align="left">{trainee.location}</TableCell>
-            <TableCell align="left">{trainee.created_at}</TableCell>
+            <TableCell align="left">{user.created_at}</TableCell>
+
         </>)
     }
-    const fetchTraineeData = async () => {
+
+    const fetchUserData = async () => {
         setFetchingData(true)
         const pagePlusOne = page + 1;
         const params = {
@@ -122,21 +111,21 @@ export default function TraineeList() {
         }
         fetchRef.current += 1;
         const fetchId = fetchRef.current;
-        const response = await axiosClient.get(BACKEND_URL.STAFF_TRAINEE_INDEX_ENDPOINT, { params })
+        const response = await axiosClient.get(BACKEND_URL.ADMIN_USER_INDEX_ENDPOINT, { params })
         if (fetchId !== fetchRef.current) return
         setFetchData(response.data);
         setFetchingData(false);
     }
 
-    const deleteTrainee = async (id) => {
+    const deleteUser = async (id) => {
         setFetchingData(true);
-        const response = await axiosClient.delete(BACKEND_URL.STAFF_TRAINEE_DELETE_ENDPOINT.concat(`/${id}`));
+        const response = await axiosClient.delete(BACKEND_URL.ADMIN_USER_DELETE_ENDPOINT.concat(`/${id}`));
         return response
     }
 
     const refreshTable = () => {
         if (page === 0)
-            fetchTraineeData();
+            fetchUserData();
         else
             setPage(0);
     }
@@ -145,29 +134,23 @@ export default function TraineeList() {
     const handleAddModalClose = () => setAddModalOpen(false);
     const handleEditModalClose = () => setEditModalOpen(false);
 
-    const handleAssignModalOpen = (entry) => {
-        setOpenEntry(entry);
-        setAssignModalOpen(true);
-    }
-    const handleAssignModalClose = () => setAssignModalOpen(false);
-
     useEffect(() => {
-        fetchTraineeData();
+        fetchUserData();
     }, [page, orderBy, order, filterName, rowsPerPage])
 
     return (
         <>
             <Helmet>
-                <title> Trainee Management </title>
+                <title> User Management </title>
             </Helmet>
 
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>
-                        Trainee Management
+                    User Management 
                     </Typography>
                     <Button onClick={handleAddModalOpen} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-                        New Trainee
+                        New User
                     </Button>
                 </Stack>
                 <UserListTable
@@ -175,7 +158,7 @@ export default function TraineeList() {
                     TABLE_ROW={TABLE_ROW}
                     useStateData={useStateData}
                     searchText={searchText}
-                    deleteEntry={deleteTrainee}
+                    deleteEntry={deleteUser}
                     refreshTable={refreshTable}
                 />
             </Container>
@@ -187,7 +170,7 @@ export default function TraineeList() {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <TraineeAdd fetchList={fetchTraineeData} />
+                    <UserAdd fetchList={fetchUserData} />
                 </Box>
             </Modal>
 
@@ -199,7 +182,7 @@ export default function TraineeList() {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <TraineeEdit fetchList={fetchTraineeData} entry={openEntry} />
+                    <UserEdit fetchList={fetchUserData} entry={openEntry} />
                 </Box>
             </Modal>
 

@@ -35,6 +35,11 @@ const  BACKEND_URL = {
     STAFF_TRAINEE_ADD_ENDPOINT: '/staff/trainees/add',
     STAFF_TRAINEE_EDIT_ENDPOINT: '/staff/trainees/edit',
     STAFF_TRAINEE_DELETE_ENDPOINT: '/staff/trainees/delete',
+    // Admin user
+    ADMIN_USER_INDEX_ENDPOINT: '/admin/users',
+    ADMIN_USER_ADD_ENDPOINT: '/admin/users/add',
+    ADMIN_USER_EDIT_ENDPOINT: '/admin/users/edit',
+    ADMIN_USER_DELETE_ENDPOINT: '/admin/users/delete',
 };
 
 export default BACKEND_URL;

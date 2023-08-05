@@ -76,10 +76,12 @@ export default function TrainerList() {
     const TABLE_HEAD = [
         { id: 'id', label: "Id", alignRight: false, orderable: true },
         { id: 'name', label: 'Name', alignRight: false, orderable: true },
-        { id: 'type', label: 'Type', alignRight: false },
-        { id: 'working_place', label: 'Working Place',alignRight: false },
+        { id: 'type', label: 'Type', alignRight: false, orderable: true },
+        { id: 'education', label: 'Education', alignRight: false, sx: { minWidth: 200 }  },
+        { id: 'working_place', label: 'Working Place', alignRight: false },
+        { id: 'phone_number', label: 'Phone Number', alignRight: false, sx: { minWidth: 150 } },
+        { id: 'email', label: 'Email', alignRight: false },
         { id: 'created_at', label: 'Created At', alignRight: false, orderable: true },
-        { id: 'assign' },
         { id: 'actions' }, // Edit & Delete
     ];
 
@@ -92,7 +94,10 @@ export default function TrainerList() {
             </Typography></TableCell>
 
             <TableCell align="left">{trainer.type}</TableCell>
+            <TableCell align="left">{trainer.education}</TableCell>
             <TableCell align="left">{trainer.working_place}</TableCell>
+            <TableCell align="left">{trainer.phone_number}</TableCell>
+            <TableCell align="left">{trainer.email}</TableCell>
             <TableCell align="left">{trainer.created_at}</TableCell>
         </>)
     }
@@ -135,7 +140,7 @@ export default function TrainerList() {
     const handleAssignModalOpen = (entry) => {
         setOpenEntry(entry);
         setAssignModalOpen(true);
-    } 
+    }
     const handleAssignModalClose = () => setAssignModalOpen(false);
 
     useEffect(() => {
@@ -151,7 +156,7 @@ export default function TrainerList() {
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>
-                    Trainer Management
+                        Trainer Management
                     </Typography>
                     <Button onClick={handleAddModalOpen} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
                         New Trainer
