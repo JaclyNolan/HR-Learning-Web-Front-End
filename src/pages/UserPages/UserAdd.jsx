@@ -20,7 +20,7 @@ export default function CourseCategoryAdd({ fetchList }) {
     const params = {
       search
     };
-    const response = await axiosClient.get(BACKEND_URL.ADMIN_USER_CATEGORY_ADD_ENDPOINT, { params });
+    const response = await axiosClient.get(BACKEND_URL.ADMIN_USER_ADD_ENDPOINT, { params });
     console.log(response)
     // const courseCategories = response.data.course_categories;
     // return courseCategories.map((courseCategory) => ({
@@ -86,7 +86,6 @@ export default function CourseCategoryAdd({ fetchList }) {
               fullWidth
               multiline
               rows={4}
-              placeholder='Description'
             />
           </Grid>
           <Grid item sm={6} xs={6}>
