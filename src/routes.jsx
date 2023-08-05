@@ -19,6 +19,7 @@ import { CourseCategoryList } from './pages/CourseCategoryPages';
 import { TopicList } from './pages/TopicPages';
 import { TrainerList } from './pages/TrainerPages';
 import { TraineeList } from './pages/TraineePages';
+import { UserList } from './pages/UserPages';
 
 // ----------------------------------------------------------------------
 
@@ -69,7 +70,7 @@ const adminRoutes = [
         children: [
           { element: <Navigate to="/dashboard/app" />, index: true },
           { path: 'app', element: <DashboardAppPage /> },
-          { path: 'user', element: <CourseList /> },
+          { path: 'user', element: <UserList /> },
         ],
       },
     ]
