@@ -77,7 +77,7 @@ export default function UserList() {
         { id: 'name', label: 'Name', alignRight: false, orderable: true },
         { id: 'email', label: 'Email', alignRight: false,},
         { id: 'role_id', label: 'Role', alignRight: false,},
-        //{ id: 'trainer.name', label: 'Trainer', alignRight: false },
+        { id: 'trainer.name', label: 'Trainer', alignRight: false },
         { id: 'created_at', label: 'Created At', alignRight: false, orderable: true },
         { id: 'actions' }, // Edit & Delete
     ];
@@ -92,7 +92,7 @@ export default function UserList() {
             </Typography></TableCell>
             <TableCell align="left">{user.email}</TableCell>
             <TableCell align="left">{getRoleName(user.role_id)}</TableCell>
-            {/* <TableCell align="left">{user.trainer.name}</TableCell> */}
+            <TableCell align="left">{user.trainer?.name}</TableCell>
 
             <TableCell align="left">{user.created_at}</TableCell>
 

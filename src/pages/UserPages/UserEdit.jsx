@@ -3,7 +3,7 @@ import DebounceSelect from '../../sections/@dashboard/user/DebounceSelect';
 import axiosClient from '../../axios-client';
 import BACKEND_URL from '../../url';
 import { useState } from 'react';
-import { CircularProgress, Typography, Grid, Stack, TextField, FormControl, InputLabel, MenuItem , Select} from '@mui/material';
+import { CircularProgress, Typography, Grid, Stack, TextField, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { useEffect } from 'react';
 import { LoadingButton } from '@mui/lab';
 
@@ -16,6 +16,7 @@ export default function CourseEdit({ fetchList, entry }) {
     const [userName, setUserName] = useState('');
     const [userEmail, setUserEmail] = useState('');
     const [userRole, setUserRole] = useState('');
+    const [trainerId, setTrainerId] = useState(null);
 
     const fetchUserEditData = async () => {
         const response = await axiosClient.get(BACKEND_URL.ADMIN_USER_EDIT_ENDPOINT.concat(`/${entry.id}`))
@@ -30,20 +31,21 @@ export default function CourseEdit({ fetchList, entry }) {
         setUserRole(event.target.value);
     };
 
-    const fetchUserAddData = async (search) => {
+    const fetchTrainerAddData = async (search) => {
         const params = {
-            search
+          search
         };
         const response = await axiosClient.get(BACKEND_URL.ADMIN_USER_ADD_ENDPOINT, { params });
         // console.log(response)
-        // const courseCategories = response.data.course_categories;
-        // return courseCategories.map((courseCategory) => ({
-        //     value: courseCategory.id,
-        //     label: `${courseCategory.id} ${courseCategory.name}`,
-        // }))
-    }
+        const trainer = response.data.trainer;
+        return trainer.map((trainer) => ({
+          value: trainer.id,
+          label: `${trainer.id} ${trainer.name}`,
+        }))
+      }
 
     const handleFormSubmit = async (event) => {
+        const trainerIdValue = trainerId ? trainerId.value : null
         event.preventDefault();
         setSubmiting(true);
         const payload = {
@@ -51,6 +53,7 @@ export default function CourseEdit({ fetchList, entry }) {
             name: userName,
             email: userEmail,
             role_id: userRole,
+            trainer_id: trainerIdValue,
         }
         console.log(payload);
         const response = await axiosClient.post(BACKEND_URL.ADMIN_USER_EDIT_ENDPOINT.concat(`/${entry.id}`), payload)
@@ -113,6 +116,20 @@ export default function CourseEdit({ fetchList, entry }) {
                                 </Select>
                             </FormControl>
                         </Grid>
+                        {userRole === 3 &&
+                            <Grid item xs={12} sm={6}>
+                                <DebounceSelect
+                                    required
+                                    id='trainer_id'
+                                    name='trainer_id'
+                                    label="Trainer"
+                                    placeholder="Select Trainer"
+                                    value={trainerId}
+                                    onChange={(value) => setTrainerId(value)}
+                                    fetchOptions={fetchTrainerAddData}
+                                />
+                            </Grid>
+                        }
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 required
@@ -124,6 +141,7 @@ export default function CourseEdit({ fetchList, entry }) {
                                 onChange={(event) => setUserEmail(event.target.value)}
                             />
                         </Grid>
+
                         <Grid item sm={6} xs={6}>
                             <LoadingButton loading={isSubmiting} fullWidth size="large" type="submit" variant="contained">
                                 Edit
