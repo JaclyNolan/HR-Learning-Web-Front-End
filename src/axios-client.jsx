@@ -1,10 +1,10 @@
 import axios from "axios";
-
+const apiUrl = import.meta.env.VITE_API_URL || `http://localhost:80/api`
 const axiosClient = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || `http://localhost:80/api`
+  baseURL: apiUrl
 })
 
-console.log(process.env.REACT_APP_API_URL);
+console.log(import.meta.env.VITE_API_URL);
 
 axiosClient.interceptors.request.use((config) => {
   const token = localStorage.getItem('ACCESS_TOKEN');
