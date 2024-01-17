@@ -18,6 +18,8 @@ export default function LoginForm() {
   const { setUser, setToken } = useAuth();
   const [isFetching, setFetching] = useState(false);
   const [error, setError] = useState(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleButtonLogin = (userType) => {
     setError(null);
@@ -34,8 +36,8 @@ export default function LoginForm() {
     }
 
     // Set input values for display purposes
-    document.getElementsByName('email')[0].value = payload.email;
-    document.getElementsByName('password')[0].value = payload.password;
+    setEmail(payload.email);
+    setPassword(payload.password);
   };
 
   const handleSubmit = async (event) => {
@@ -71,11 +73,13 @@ export default function LoginForm() {
   return (
     <form onSubmit={handleSubmit}>
       <Stack spacing={3}>
-        <TextField name="email" label="Email address" required autoFocus />
+        <TextField name="email" label="Email address" value={email} onChange={setEmail} required autoFocus />
 
         <TextField
           name="password"
           label="Password"
+          value={password}
+          onChange={setPassword}
           required
           type={showPassword ? 'text' : 'password'}
           InputProps={{
