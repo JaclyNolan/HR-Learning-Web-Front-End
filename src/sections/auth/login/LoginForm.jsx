@@ -28,9 +28,9 @@ export default function LoginForm() {
     if (userType === 'Admin') {
       payload = { email: 'anhbg330011@gmail.com', password: 'password' };
     } else if (userType === 'Trainer') {
-      payload = { email: 'kunde.augustus@example.net', password: 'password' };
+      payload = { email: 'anhnmbh00203@fpt.edu.vn', password: 'password' };
     } else if (userType === 'Trainee') {
-      payload = { email: 'selena.zieme@example.net', password: 'password' };
+      payload = { email: 'ivansally0@gmail.com', password: 'password' };
     }
 
     // Set input values for display purposes
