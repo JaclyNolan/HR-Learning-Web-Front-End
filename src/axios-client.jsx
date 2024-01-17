@@ -4,6 +4,8 @@ const axiosClient = axios.create({
   baseURL: process.env.REACT_API_APP_URL || `http://localhost:80/api`
 })
 
+console.log(process.env.REACT_API_APP_URL || `http://localhost:80/api`);
+
 axiosClient.interceptors.request.use((config) => {
   const token = localStorage.getItem('ACCESS_TOKEN');
   config.headers.Authorization = `Bearer ${token}`
