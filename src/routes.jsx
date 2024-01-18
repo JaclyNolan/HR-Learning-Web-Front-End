@@ -63,12 +63,12 @@ const adminRoutes = [
   {
     element: <RequireAuth allowedRoles={['admin']} />,
     children: [
-      { element: <Navigate to="/dashboard/app" />, index: true },
+      { element: <Navigate to="/dashboard/user" />, index: true },
       {
-        path: '/dashboard',
+        path: '/dashboard/user',
         element: <AdminLayout />,
         children: [
-          { element: <Navigate to="/dashboard/app" />, index: true },
+          { element: <Navigate to="/dashboard/user" />, index: true },
           { path: 'app', element: <DashboardAppPage /> },
           { path: 'user', element: <UserList /> },
         ],
@@ -82,12 +82,12 @@ const staffRoutes = [
   {
     element: <RequireAuth allowedRoles={['staff']} />,
     children: [
-      { element: <Navigate to="/dashboard/app" />, index: true },
+      { element: <Navigate to="/dashboard/trainee" />, index: true },
       {
         path: '/dashboard',
         element: <AdminLayout />,
         children: [
-          { element: <Navigate to="/dashboard/app" />, index: true },
+          { element: <Navigate to="/dashboard/trainee" />, index: true },
           { path: 'app', element: <DashboardAppPage /> },
           { path: 'trainee', element: <TraineeList /> },
           { path: 'trainer', element: <TrainerList /> },
